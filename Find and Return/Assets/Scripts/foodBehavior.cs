@@ -4,7 +4,8 @@ using System.Collections;
 public class foodBehavior : MonoBehaviour {
 
 	public float foodValue;
-	//public Material mat;
+	public float maxFoodValue;
+
 	private Color32 green1;
 	private Color32 green2;
 	private Color32 green3;
@@ -12,29 +13,35 @@ public class foodBehavior : MonoBehaviour {
 	public Renderer rend;
 	public float growthRate;
 
+
 	public float seedRequirement; //minimum threshhold before producing seeds
 	public int seedRange;	 	  //range seeds can go
 	public int seedNumber;	      //number of seeds produced
 	public float seedSurvival;      //percent of seeds that create a new patch
 	public float seedCost;	      //cost per seed
+	private bool seedFlag = false;
 
 	public GameObject Grass;
 	private foodBehavior fb;
 	private universalScripts u = universalScripts.getInstance();
+	private int foodTicker = 0;
 
 	// Use this for initialization
 	void Start () {
 
-		green1 = new Color32(28,226,19,255);
-		green2 = new Color32(19,142,2,255);
-		green3 = new Color32(71,53,7,255);
+		green1 = new Color32(28,255,19,255);
+		green2 = new Color32(30,120,12,255);
+		green3 = new Color32(71,30,7,255);
 		thisFood = gameObject;
+
+
 		changeColor ();
 
+		maxFoodValue = 50;
 		growthRate = .02f;
 		seedRange = 3;
-		seedNumber = 10;
-		seedSurvival = .01f;
+		seedNumber = 1;
+		seedSurvival = .1f;
 		seedCost = seedRange * seedRange * seedNumber * seedSurvival*10;
 		seedRequirement = seedCost*3;
 
@@ -43,17 +50,22 @@ public class foodBehavior : MonoBehaviour {
 	public void changeColor()
 	{
 		rend = thisFood.GetComponent<Renderer>();
-		if (foodValue < 10)
+
+		if (foodValue<20) 
 			rend.material.color = green3;
-		else if (foodValue < 30)
+		else if (foodValue<40) 
 			rend.material.color = green2;
-		else
+		else 
 			rend.material.color = green1;
+
+		//green2 = Color32.Lerp(green3, green1, foodValue/maxFoodValue);
+		//rend.material.color = green2;
 	}
 
-	public void seedGrass()
+	public void seedFood()
 	{
 		foodValue -= seedCost;
+		changeColor ();
 		for (int iSeed = 0; iSeed<seedNumber; iSeed++) {
 			if(Random.value<seedSurvival)
 			{
@@ -61,17 +73,17 @@ public class foodBehavior : MonoBehaviour {
 				int zPos = Mathf.RoundToInt(transform.position.z)+ Mathf.RoundToInt(Random.value*seedRange*2)-seedRange;
 				int gridPosX = Mathf.RoundToInt (xPos+u.getPlatformSize()/2);
 				int gridPosZ = Mathf.RoundToInt (zPos+u.getPlatformSize()/2);
-				Debug.Log ("X:"+xPos+" Z:"+ zPos+" gridX:"+gridPosX+" gridZ:"+gridPosZ);
-				Debug.Log ("Value@:"+ u.getGridValue(gridPosX, gridPosZ));
+
 
 				if (u.getGridValue(gridPosX, gridPosZ)==0)
 				{
-					Vector3 seedPosition = new Vector3(xPos, .1f, zPos);
+					Vector3 seedPosition = new Vector3(xPos, .5f, zPos);
 					GameObject grass = Instantiate<GameObject>(Grass);
 					grass.transform.position = seedPosition;
 					fb = grass.GetComponent("foodBehavior")as foodBehavior;
 					fb.foodValue = .2f;
 					u.setGridValue (gridPosX, gridPosZ, fb.foodValue);
+					u.foodCount++;
 				}
 
 			}
@@ -83,17 +95,15 @@ public class foodBehavior : MonoBehaviour {
 	public void grow()
 	{
 		foodValue += growthRate;
-		if (foodValue > seedRequirement)
-			seedGrass ();
-
+		if (foodValue > seedRequirement || foodValue==maxFoodValue) {
+			seedFood();
+		}
 	}
 
 	// Update is called once per frame
 	void Update () {
 		grow ();
-
-		if ((u.getTicker () % (1 / growthRate)) < 1.5) {
-			changeColor ();
-		}
+		changeColor();
 	}
+
 }

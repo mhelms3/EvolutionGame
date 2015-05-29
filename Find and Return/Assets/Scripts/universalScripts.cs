@@ -12,6 +12,7 @@ public class universalScripts {
 	private int ticker;
 	private DateTime startTime;
 	private int currentTime;
+	public int foodCount;
 
 
 	//singleton constructor
@@ -21,6 +22,7 @@ public class universalScripts {
 		for (int i = 0; i<platformSize; i++)
 			for (int k =0; k<platformSize; k++)
 				grassGrid [i, k] = 0.0f;
+		Debug.Log ("GRID INIT COMPLETE");
 	}
 
 	//private contructor
@@ -51,12 +53,9 @@ public class universalScripts {
 			return -1f;
 	}
 
-	public bool setGridValue(int i, int j, float gridValue) {
-		if ((i < gridSize) && (j < gridSize)) {
+	public void setGridValue(int i, int j, float gridValue) {
+		if ((i < platformSize) && (j < platformSize)) 
 			grassGrid [i, j] = gridValue;
-			return true;
-		} else
-			return false;
 	}
 
 	public void incrementTicker(){

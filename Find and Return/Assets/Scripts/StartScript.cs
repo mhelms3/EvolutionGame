@@ -18,7 +18,7 @@ public class StartScript : MonoBehaviour {
 	private Vector3 startingPosition;
 
 	private universalScripts u = universalScripts.getInstance();
-	private bool isSet = true;
+
 
 
     // Use this for initialization
@@ -41,7 +41,7 @@ public class StartScript : MonoBehaviour {
 		foodTotal = u.getGridSize(); //(e.g. 50 x 50matrix)
 		foodPercentage = .25f; //percent of explored grid units to have a grass patch 
 		spread = foodTotal / 2;
-		int gridOrigin = Mathf.RoundToInt(u.getPlatformSize() / 2);
+		int gridOrigin = Mathf.RoundToInt(u.getPlatformSize() / 2 - u.getGridSize()/2);
 
         for (int i = 0; i < foodTotal; i++)
 			for (int j = 0; j < foodTotal; j++)
@@ -54,16 +54,17 @@ public class StartScript : MonoBehaviour {
 				grass .transform.position = startingPosition;
 				fb = grass .GetComponent("foodBehavior")as foodBehavior;
 				fb.foodValue = Random.value * 50f;
-				isSet = u.setGridValue(i+gridOrigin, j+gridOrigin, fb.foodValue);
-			}
+				u.setGridValue(i+gridOrigin, j+gridOrigin, fb.foodValue);
+				u.foodCount++;
 
-			if (!isSet)
-				Debug.Log ("The following index is out of range in StartScript i:"+i+", j:"+j);
+			}
         }
     }
 	
 	// Update is called once per frame
 	void Update () {
 		u.incrementTicker ();
+		if (Input.GetKey("escape"))
+			Application.Quit();
 	}
 }

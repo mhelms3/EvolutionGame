@@ -8,18 +8,28 @@ public class gathererScript : moveBehaviors {
 	private bool returnFlag = false;
 	private foodBehavior eatTarget;
 	private baseBehavior baseTarget;
-	private float harvestSpeed = 0.04f;
+	private float harvestSpeed = 0.1f;
+	private int tick = 0;
+	public int tickCheck = 29;
+	private GameObject nearBase;
+	private GameObject target;
+
 	Vector3 predatorLocation = Vector3.zero;
+	private universalScripts u = universalScripts.getInstance();
+
 
 	// Use this for initialization
 	void Start () {
 		//move stuff
 		senseDistance = 4;
-		speed = 5f;
+		speed = 8f;
 		maxWanderSteps = 30;
 		maxRunAwaySteps = 100;
 
 		wanderTarget = setNewCourse (transform.position);	//sets WanderTarget relative to where this object was instantiated	
+
+		nearBase = findClosestObject("Base");
+		target = findClosestObject ("Food");
 
 		//alive stuff
 		maximumHealth = 10;
@@ -46,6 +56,7 @@ public class gathererScript : moveBehaviors {
 		if (eatTarget.foodValue < 1) 
 		{
 			//food.SetActive (false);
+			u.foodCount--;
 			Destroy(food);
 		}
 	}
@@ -61,16 +72,18 @@ public class gathererScript : moveBehaviors {
 
 	void Update () {
 
-		ageCreature();
-		consumeResources();
-		eatFood();
-		hungryCheck ();
-		starvingCheck ();
-		healthCheck ();
+
+			ageCreature (1);
+			consumeResources (1);
+			eatFood ();
+			hungryCheck ();
+			starvingCheck ();
+			healthCheck ();
 
 
 		//add predator check and run away from predator
 		GameObject predatorTarget = predatorCheck ();
+
 		if (predatorTarget != null && afraidFlag==false) {
 			//Debug.Log ("PREDATOR FOUND");
 			afraidFlag = true;
@@ -83,8 +96,9 @@ public class gathererScript : moveBehaviors {
 		}
 		else if (returnFlag)
 		{
-			GameObject nearBase = findClosestObject("Base");
-			if (nearBase!=null)
+			if (nearBase==null)
+				nearBase = findClosestObject("Base");
+			else
 			{
 				distanceToTarget = getTargetDistance(nearBase.transform.position);
 				if (distanceToTarget < .5)
@@ -97,15 +111,19 @@ public class gathererScript : moveBehaviors {
 				else
 					moveToTarget(nearBase.transform.position);
 			}
-			else
-			{	
-				Debug.Log ("NULL NEARBASE ERROR");
-			}
+
 		}
 		else
 		{
-			GameObject target = findClosestObject("Food");
-			if (target!=null)
+			//default behavior = find food (quit application if there is no food remaining)
+			if (u.foodCount<1)
+				Application.Quit ();
+
+			//if no food target, then get one
+			else if (target == null)
+				target = findClosestObject("Food");
+
+			else 
 			{
 				distanceToTarget = getTargetDistance(target.transform.position);
 				if (distanceToTarget < .25)
@@ -118,9 +136,12 @@ public class gathererScript : moveBehaviors {
 					if(distanceToTarget < senseDistance)
 						moveToTarget(target.transform.position);
 					else
+					{
+						target = findClosestObject("Food");
 						wander(); 
 						//add some trail, and check for trail stuff here						
 						//add some repulsers for predators and for death spots
+					}
 				}
 
 				if (currentCapacity >= maximumCapacity)
@@ -128,11 +149,6 @@ public class gathererScript : moveBehaviors {
 					returnFlag = true;
 					groundObject();
 				}
-			}
-			else
-			{
-				returnFlag=true;
-				Debug.Log ("NULL FOOD ERROR");
 			}
 		}        
 	}

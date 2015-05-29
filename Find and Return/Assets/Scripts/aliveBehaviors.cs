@@ -29,16 +29,16 @@ public class aliveBehaviors : MonoBehaviour {
 
 	}
 
-	public void ageCreature(){
+	public void ageCreature(int factor){
 		//age
 
-			currentAge = currentAge + rateOfAge;
+			currentAge = currentAge + (rateOfAge*factor);
 		if (currentAge > maximumAge) 
 			currentHealth = 0;
 	}
 
 	public bool hungryCheck(){
-		if ((maximumResources - currentResources)  < (maximumResources*.2)) 
+		if (currentResources  < (maximumResources*0.6f)) 
 			return(true);
 		else
 			return(false);
@@ -57,16 +57,16 @@ public class aliveBehaviors : MonoBehaviour {
 		isHungry = hungryCheck ();
 	}
 
-	public void consumeResources()
+	public void consumeResources(int factor)
 	{
 		//resource consumption
-		currentResources -= resourceRequirement;
+		currentResources -= (resourceRequirement*factor);
 	}
 
 	public void starvingCheck(){
 
 		if (currentResources < 0) {
-			currentHealth -= (maximumHealth / 50);
+			currentHealth -= (maximumHealth / 20);
 			isStarving = true;
 		} else
 			isStarving = false;
@@ -80,12 +80,13 @@ public class aliveBehaviors : MonoBehaviour {
 	// Update is called once per frame
 	public void Update () {
 
-		ageCreature();
+	/*	ageCreature();
 		consumeResources();
 		eatFood();
 		hungryCheck ();
 		starvingCheck ();
 		healthCheck ();
+		*/
 	
 	}
 }

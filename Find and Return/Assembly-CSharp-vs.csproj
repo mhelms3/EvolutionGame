@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\moveBehaviors.cs" />
      <Compile Include="Assets\Scripts\predatorBehavior.cs" />
      <Compile Include="Assets\Scripts\rotatePill.cs" />
+     <Compile Include="Assets\Scripts\scrollCamera.cs" />
      <Compile Include="Assets\Scripts\universalScripts.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
