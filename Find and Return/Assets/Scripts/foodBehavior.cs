@@ -9,6 +9,9 @@ public class foodBehavior : MonoBehaviour {
 	private Color32 green1;
 	private Color32 green2;
 	private Color32 green3;
+	private Color32 seedColor;
+
+
 	private GameObject thisFood;
 	public Renderer rend;
 	public float growthRate;
@@ -20,6 +23,7 @@ public class foodBehavior : MonoBehaviour {
 	public float seedSurvival;      //percent of seeds that create a new patch
 	public float seedCost;	      //cost per seed
 	private bool seedFlag = false;
+	private int seedCounter = 0;
 
 	public GameObject Grass;
 	private foodBehavior fb;
@@ -32,10 +36,11 @@ public class foodBehavior : MonoBehaviour {
 		green1 = new Color32(28,255,19,255);
 		green2 = new Color32(30,120,12,255);
 		green3 = new Color32(71,30,7,255);
+		seedColor = new Color32 (140, 120, 7, 125);
 		thisFood = gameObject;
 
 
-		changeColor ();
+		changeColor (false);
 
 		maxFoodValue = 50;
 		growthRate = .02f;
@@ -47,25 +52,25 @@ public class foodBehavior : MonoBehaviour {
 
 	}
 
-	public void changeColor()
+	public void changeColor(bool seedFlag)
 	{
 		rend = thisFood.GetComponent<Renderer>();
 
-		if (foodValue<20) 
-			rend.material.color = green3;
-		else if (foodValue<40) 
+		if (seedFlag)
+			seedCounter = 10;
+		if (seedCounter > 0) {
+			seedCounter--;
+			rend.material.color = seedColor;
+		} else {
+			green2 = Color32.Lerp (green3, green1, (foodValue / maxFoodValue) *Time.deltaTime);
 			rend.material.color = green2;
-		else 
-			rend.material.color = green1;
-
-		//green2 = Color32.Lerp(green3, green1, foodValue/maxFoodValue);
-		//rend.material.color = green2;
+		}
 	}
 
 	public void seedFood()
 	{
 		foodValue -= seedCost;
-		changeColor ();
+		changeColor (true);
 		for (int iSeed = 0; iSeed<seedNumber; iSeed++) {
 			if(Random.value<seedSurvival)
 			{
@@ -103,7 +108,7 @@ public class foodBehavior : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		grow ();
-		changeColor();
+		changeColor(false);
 	}
 
 }

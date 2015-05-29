@@ -43,22 +43,19 @@ public class gathererScript : moveBehaviors {
 		currentCapacity = 0;
 		maximumCapacity = 5;
 	}
-	
-
-	
+		
 	private void eatObject (GameObject food)
 	{		
 		eatTarget = food.GetComponent("foodBehavior")as foodBehavior;
 		eatTarget.foodValue -= harvestSpeed;
 		currentCapacity += harvestSpeed;
-		eatTarget.changeColor ();
-
 		if (eatTarget.foodValue < 1) 
 		{
-			//food.SetActive (false);
 			u.foodCount--;
 			Destroy(food);
 		}
+		else
+			eatTarget.changeColor (false);
 	}
 
 	private GameObject predatorCheck()
@@ -73,12 +70,15 @@ public class gathererScript : moveBehaviors {
 	void Update () {
 
 
-			ageCreature (1);
-			consumeResources (1);
-			eatFood ();
-			hungryCheck ();
-			starvingCheck ();
-			healthCheck ();
+		ageCreature (1);
+		consumeResources (1);
+		eatFood ();
+		hungryCheck ();
+		starvingCheck ();
+		healthCheck ();
+	
+
+
 
 
 		//add predator check and run away from predator
@@ -107,6 +107,11 @@ public class gathererScript : moveBehaviors {
 					baseTarget.resourceFood += currentCapacity;
 					currentCapacity = 0;
 					returnFlag = false;
+				}
+				else if (distanceToTarget > senseDistance)
+				{
+					nearBase = findClosestObject("Base");
+					moveToTarget(nearBase.transform.position);
 				}
 				else
 					moveToTarget(nearBase.transform.position);
