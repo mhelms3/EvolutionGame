@@ -78,11 +78,14 @@ MonoBehaviour:
   currentAge: 0
   maximumAge: 0
   rateOfAge: 0
+  maturityAge: 0
+  isBaby: 0
   currentResources: 0
   maximumResources: 0
   resourceRequirement: 0
   isStarving: 0
   isHungry: 0
+  killFlag: 0
   currentCapacity: 0
   maximumCapacity: 0
   senseDistance: 0
@@ -96,7 +99,7 @@ MonoBehaviour:
   afraidFlag: 0
   maxRunAwaySteps: 0
   runAwaySteps: 0
-  tickCheck: 29
+  AdultWorker: {fileID: 103150}
 --- !u!135 &13539072
 SphereCollider:
   m_ObjectHideFlags: 1

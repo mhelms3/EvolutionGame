@@ -88,14 +88,16 @@ public class moveBehaviors : aliveBehaviors {
 	{        
 		Vector3 tempTarget = targetPosition;
 		float step = speed * Time.deltaTime;
-		tempTarget.y = transform.position.y; //adjust the y co-ord to be level, to avoid "sinking"
+		tempTarget.y = .5f;
+		//tempTarget.y = transform.position.y; //adjust the y co-ord to be level, to avoid "sinking"
 		transform.position = Vector3.MoveTowards(transform.position, tempTarget, step);
 	}
 	
 	public void moveAwayFromTarget(Vector3 targetPosition)
 	{        
 		Vector3 tempTarget = targetPosition;
-		tempTarget.y = transform.position.y; //adjust the y co-ord to be level, to avoid "sinking"
+		//tempTarget.y = transform.position.y; //adjust the y co-ord to be level, to avoid "sinking"
+		tempTarget.y = .5f;
 		float step = -speed * Time.deltaTime;
 		transform.position = Vector3.MoveTowards(transform.position, tempTarget, step);
 	}

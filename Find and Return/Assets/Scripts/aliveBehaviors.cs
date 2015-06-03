@@ -11,6 +11,8 @@ public class aliveBehaviors : MonoBehaviour {
 	public float currentAge;
 	public float maximumAge;
 	public float rateOfAge;
+	public float maturityAge;
+	public bool isBaby;
 
 	//current and maximum level of "resource energy" that the creature maintains for its health
 	//if current goes below 0, creature begins to starve (takes HP damage)
@@ -19,6 +21,7 @@ public class aliveBehaviors : MonoBehaviour {
 	public float resourceRequirement;
 	public bool isStarving = false;
 	public bool isHungry = false;
+	public bool killFlag = false;
 
 	//the amount of food that can be stored, above the creatures personal resources
 	public float currentCapacity;
@@ -34,8 +37,12 @@ public class aliveBehaviors : MonoBehaviour {
 		//age
 
 			currentAge = currentAge + (rateOfAge*factor);
-		if (currentAge > maximumAge) 
-			currentHealth = 0;
+		if (currentAge > maximumAge) {
+			killFlag = true;
+			u.sheepAge++;
+			u.updateCountText("Age");
+		}
+
 	}
 
 	public bool hungryCheck(){
@@ -76,15 +83,29 @@ public class aliveBehaviors : MonoBehaviour {
 
 	public void healthCheck(){
 		if (currentHealth <= 0) {
-			u.sheep--;
-			u.updateCountText("Sheep");
-			Destroy (gameObject);
+			killFlag = true;
+			u.sheepStarve++;
+			u.updateCountText("Starve");
 		}
 
 	}
 
-	/*
-	public void Update () {
+	public void killUnit()
+	{
+		if (isBaby)
+			u.babySheep--;
+		else
+			u.sheep--;
+
+			u.updateCountText("Sheep");
+			DestroyImmediate (gameObject);
 	}
-	*/
+
+
+	public void LateUpdate () {
+		if(killFlag)
+			killUnit();
+
+	}
+
 }

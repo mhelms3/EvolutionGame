@@ -1,48 +1,47 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &111478
+--- !u!1 &115026
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 454694}
-  - 33: {fileID: 3348234}
-  - 136: {fileID: 13609738}
-  - 23: {fileID: 2323008}
-  - 114: {fileID: 11412430}
-  - 114: {fileID: 11483468}
+  - 4: {fileID: 496886}
+  - 33: {fileID: 3338720}
+  - 135: {fileID: 13506232}
+  - 23: {fileID: 2391550}
+  - 114: {fileID: 11491780}
   m_Layer: 0
-  m_Name: Capsule
-  m_TagString: Food
+  m_Name: BabySheep
+  m_TagString: Gatherer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &454694
+--- !u!4 &496886
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111478}
-  m_LocalRotation: {x: 0, y: 0, z: .382683456, w: .923879504}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 115026}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2, y: .5, z: 2}
   m_LocalScale: {x: .5, y: .5, z: .5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2323008
+--- !u!23 &2391550
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111478}
+  m_GameObject: {fileID: 115026}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 0b738192124b08b4f891724726d2a104, type: 2}
+  - {fileID: 2100000, guid: e00c7abb20189ea41a12b3e7b86243a2, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -56,57 +55,62 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3348234
+--- !u!33 &3338720
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111478}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &11412430
+  m_GameObject: {fileID: 115026}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &11491780
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111478}
+  m_GameObject: {fileID: 115026}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2915fd0e8e8555145b08c72dd518b72e, type: 3}
+  m_Script: {fileID: 11500000, guid: eacbf4b4f22bdbe4a9cd4e303c068198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodValue: 0
-  rend: {fileID: 0}
-  growthRate: 0
-  seedRequirement: 0
-  seedRange: 0
-  seedNumber: 0
-  seedSurvival: 0
-  seedCost: 0
-  Grass: {fileID: 0}
---- !u!114 &11483468
-MonoBehaviour:
+  currentHealth: 0
+  maximumHealth: 0
+  currentAge: 0
+  maximumAge: 0
+  rateOfAge: 0
+  maturityAge: 0
+  isBaby: 0
+  currentResources: 0
+  maximumResources: 0
+  resourceRequirement: 0
+  isStarving: 0
+  isHungry: 0
+  killFlag: 0
+  currentCapacity: 0
+  maximumCapacity: 0
+  senseDistance: 0
+  distanceToTarget: Infinity
+  speed: 0
+  upFlag: 1
+  wanderSteps: 0
+  maxWanderSteps: 0
+  sizeOfSpace: 50
+  wanderTarget: {x: 0, y: 0, z: 0}
+  afraidFlag: 0
+  maxRunAwaySteps: 0
+  runAwaySteps: 0
+  AdultWorker: {fileID: 103150, guid: 74c70bdc4f60c3c42918d55dc60f34cc, type: 2}
+--- !u!135 &13506232
+SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dd73cadb907e054bbc2b8393f49d28e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pillTransform: {fileID: 454694}
---- !u!136 &13609738
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111478}
+  m_GameObject: {fileID: 115026}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
+  serializedVersion: 2
   m_Radius: .5
-  m_Height: 2
-  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
@@ -117,5 +121,5 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 111478}
+  m_RootGameObject: {fileID: 115026}
   m_IsPrefabParent: 1

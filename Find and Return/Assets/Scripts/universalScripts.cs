@@ -15,10 +15,22 @@ public class universalScripts {
 	private int currentTime;
 	public int foodCount;
 	public int wolves;
+
 	public int sheep;
+	public int babySheep;
+
+	public int sheepStarve;
+	public int sheepMature;
+	public int sheepAge;
+
 	public int total;
 	public Text wcount;
 	public Text scount;
+	public Text babySheepCount;
+	public Text totalSheepCount;
+	public Text ageSheepCount;
+	public Text matureSheepCount;
+	public Text starveSheepCount;
 	public Text tcount;
 	public Text fcount;
 
@@ -32,9 +44,20 @@ public class universalScripts {
 				break;
 			case "Sheep":
 				scount.text = sheep.ToString ();
+				babySheepCount.text = babySheep.ToString ();
+				totalSheepCount.text = (babySheep+sheep).ToString ();
 				break;
 			case "Food":
 				fcount.text = foodCount.ToString ();
+				break;
+			case "Starve":
+				starveSheepCount.text = sheepStarve.ToString ();
+				break;
+			case "Age":
+				ageSheepCount.text = sheepAge.ToString ();
+				break;
+			case "Mature":
+				matureSheepCount.text = sheepMature.ToString ();
 				break;
 			default:			
 				break;
@@ -45,14 +68,6 @@ public class universalScripts {
 	}
 
 
-
-	public void dumpData(){
-	
-		Debug.Log ("W"+wcount.text);
-		Debug.Log ("S"+scount.text);
-		Debug.Log ("F"+fcount.text);
-
-	}
 
 	//singleton constructor
 	private static universalScripts INSTANCE = new universalScripts();

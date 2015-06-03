@@ -88,7 +88,7 @@ MonoBehaviour:
   resourceFood: 0
   newGathererAmount: 0
   foodIncrement: 0
-  Worker: {fileID: 0}
+  BabySheep: {fileID: 115026, guid: 5076f1e3e8903e844a5aafe942c09952, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

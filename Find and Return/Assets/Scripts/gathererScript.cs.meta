@@ -1,10 +1,11 @@
 fileFormatVersion: 2
 guid: eacbf4b4f22bdbe4a9cd4e303c068198
-timeCreated: 1432243595
+timeCreated: 1433345380
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - AdultWorker: {fileID: 103150, guid: 74c70bdc4f60c3c42918d55dc60f34cc, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

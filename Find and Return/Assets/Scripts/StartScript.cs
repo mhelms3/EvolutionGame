@@ -4,16 +4,22 @@ using UnityEngine.UI;
 
 public class StartScript : MonoBehaviour {
 
-    public GameObject Worker;    
+	public GameObject Worker;
 	public GameObject Grass;
     public GameObject Base;
 	public GameObject Predator;
 	public GameObject theGame;
 
 	public Text sheepCountDisplay;
+	public Text babySheepCountDisplay;
+	public Text totalSheepCountDisplay;
 	public Text wolfCountDisplay;
 	public Text foodCountDisplay;
 	public Text totalCountDisplay;
+
+	public Text sheepAgeCountDisplay;
+	public Text sheepMatureCountDisplay;
+	public Text sheepStarveCountDisplay;
 
 	public int spread;
 	public int foodTotal;
@@ -27,31 +33,52 @@ public class StartScript : MonoBehaviour {
 
 
 
+
+
     // Use this for initialization
     void Start()
     {
+		GameObject newAdultWorker;
+		gathererScript gsWorker;
         //Instantiate(Base);
 		universalScripts u = universalScripts.getInstance();
+	    
+		//gathererScript newAdultWorker;
+
 
 		u.wolves = 0;
 		u.sheep = 0;
 		u.foodCount = 0;
 		u.total = 0;
 
+		u.babySheep = 0;
+		
+		u.sheepStarve =0;
+		u.sheepMature =0;
+		u.sheepAge =0;
+
 		u.scount = sheepCountDisplay;
+		u.babySheepCount = babySheepCountDisplay;
+		u.totalSheepCount = totalSheepCountDisplay;
+
 		u.fcount = foodCountDisplay;
 		u.tcount = totalCountDisplay;
 		u.wcount = wolfCountDisplay;
 
-		//u.updateCountText ("Wolf");
-		//u.updateCountText ("Sheep");
-		//u.updateCountText ("Food");
+		u.ageSheepCount= sheepAgeCountDisplay;
+		u.matureSheepCount = sheepMatureCountDisplay;
+		u.starveSheepCount = sheepStarveCountDisplay;
+
 		//u.dumpData ();
+
 
 		startingSheep = 10;
 		for (int k = 0; k<startingSheep; k++) {
 			startingPosition = new Vector3 (Random.value*10-5, .5f, Random.value*10-5 );        
-			Instantiate (Worker, startingPosition, Quaternion.identity);
+			newAdultWorker = Instantiate<GameObject> (Worker);
+			newAdultWorker.transform.position = startingPosition;
+			gsWorker = newAdultWorker.GetComponent ("gathererScript") as gathererScript;
+			gsWorker.setAdult ();
 			u.sheep++;
 			u.updateCountText ("Sheep");
 		}

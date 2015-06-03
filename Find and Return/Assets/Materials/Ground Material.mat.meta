@@ -1,5 +1,8 @@
 fileFormatVersion: 2
 guid: e206ce82467ef9d46a32e2970efb0778
+labels:
+- Vegetation
+- Terrain
 timeCreated: 1432056364
 licenseType: Free
 NativeFormatImporter:

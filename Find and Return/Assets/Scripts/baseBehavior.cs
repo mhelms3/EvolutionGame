@@ -6,7 +6,7 @@ public class baseBehavior : MonoBehaviour {
 	public float resourceFood;
 	public float newGathererAmount;
 	public float foodIncrement;
-	public GameObject Worker;
+	public GameObject BabySheep;
 	private universalScripts u = universalScripts.getInstance();
 
 	// Use this for initialization
@@ -19,8 +19,8 @@ public class baseBehavior : MonoBehaviour {
 
 	private void spawnNewGatherer(){
 		Vector3 newStartingPosition = new Vector3 (Random.value * 5, 0.5f, Random.value * 5);
-		Instantiate(Worker, newStartingPosition, Quaternion.identity);
-		u.sheep++;
+		GameObject newGatherer = (GameObject)Instantiate(BabySheep, newStartingPosition, Quaternion.identity);
+		u.babySheep++;
 		u.updateCountText("Sheep");
 	}
 
