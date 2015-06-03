@@ -86,6 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodValue: 0
+  maxFoodValue: 0
   rend: {fileID: 0}
   growthRate: 0
   seedRequirement: 0
@@ -94,6 +95,7 @@ MonoBehaviour:
   seedSurvival: 0
   seedCost: 0
   Grass: {fileID: 129382}
+  killFlag: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

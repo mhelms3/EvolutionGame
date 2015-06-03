@@ -7,6 +7,7 @@ public class baseBehavior : MonoBehaviour {
 	public float newGathererAmount;
 	public float foodIncrement;
 	public GameObject Worker;
+	private universalScripts u = universalScripts.getInstance();
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,8 @@ public class baseBehavior : MonoBehaviour {
 	private void spawnNewGatherer(){
 		Vector3 newStartingPosition = new Vector3 (Random.value * 5, 0.5f, Random.value * 5);
 		Instantiate(Worker, newStartingPosition, Quaternion.identity);
+		u.sheep++;
+		u.updateCountText("Sheep");
 	}
 
 	// Update is called once per frame

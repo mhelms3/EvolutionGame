@@ -7,7 +7,7 @@ public class scrollCamera : MonoBehaviour {
 
 	public float distanceMin = 20;
 	public float distanceMax = 80;
-	public float zoomSpeed = 9.0f;
+	public float zoomSpeed = 15.0f;
 	
 	private float[] distances = new float[32];
 	private Vector3 moveDirection = Vector3.zero;

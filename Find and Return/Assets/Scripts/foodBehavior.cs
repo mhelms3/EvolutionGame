@@ -29,6 +29,7 @@ public class foodBehavior : MonoBehaviour {
 	private foodBehavior fb;
 	private universalScripts u = universalScripts.getInstance();
 	private int foodTicker = 0;
+	public bool killFlag = false;
 
 	// Use this for initialization
 	void Start () {
@@ -43,11 +44,11 @@ public class foodBehavior : MonoBehaviour {
 		changeColor (false);
 
 		maxFoodValue = 50;
-		growthRate = .02f;
-		seedRange = 3;
+		growthRate = .05f;
+		seedRange = 5;
 		seedNumber = 1;
-		seedSurvival = .1f;
-		seedCost = seedRange * seedRange * seedNumber * seedSurvival*10;
+		seedSurvival = .2f;
+		seedCost = seedRange * seedNumber * seedSurvival* 15;
 		seedRequirement = seedCost*3;
 
 	}
@@ -62,7 +63,7 @@ public class foodBehavior : MonoBehaviour {
 			seedCounter--;
 			rend.material.color = seedColor;
 		} else {
-			green2 = Color32.Lerp (green3, green1, (foodValue / maxFoodValue) *Time.deltaTime);
+			green2 = Color32.Lerp (green3, green1, (foodValue / maxFoodValue));
 			rend.material.color = green2;
 		}
 	}
@@ -89,6 +90,8 @@ public class foodBehavior : MonoBehaviour {
 					fb.foodValue = .2f;
 					u.setGridValue (gridPosX, gridPosZ, fb.foodValue);
 					u.foodCount++;
+					u.updateCountText("Food");
+
 				}
 
 			}
@@ -105,10 +108,24 @@ public class foodBehavior : MonoBehaviour {
 		}
 	}
 
+	public void killPlant()
+	{
+		if (killFlag) {
+			Destroy (gameObject);
+			u.foodCount--;
+			u.updateCountText ("Food");
+		}
+	}
+
 	// Update is called once per frame
 	void Update () {
 		grow ();
 		changeColor(false);
+	}
+
+	void LateUpdate()
+	{
+		killPlant();
 	}
 
 }

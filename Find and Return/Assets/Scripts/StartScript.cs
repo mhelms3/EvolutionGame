@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class StartScript : MonoBehaviour {
 
@@ -8,6 +9,11 @@ public class StartScript : MonoBehaviour {
     public GameObject Base;
 	public GameObject Predator;
 	public GameObject theGame;
+
+	public Text sheepCountDisplay;
+	public Text wolfCountDisplay;
+	public Text foodCountDisplay;
+	public Text totalCountDisplay;
 
 	public int spread;
 	public int foodTotal;
@@ -27,15 +33,34 @@ public class StartScript : MonoBehaviour {
         //Instantiate(Base);
 		universalScripts u = universalScripts.getInstance();
 
+		u.wolves = 0;
+		u.sheep = 0;
+		u.foodCount = 0;
+		u.total = 0;
+
+		u.scount = sheepCountDisplay;
+		u.fcount = foodCountDisplay;
+		u.tcount = totalCountDisplay;
+		u.wcount = wolfCountDisplay;
+
+		//u.updateCountText ("Wolf");
+		//u.updateCountText ("Sheep");
+		//u.updateCountText ("Food");
+		//u.dumpData ();
+
 		startingSheep = 10;
 		for (int k = 0; k<startingSheep; k++) {
 			startingPosition = new Vector3 (Random.value*10-5, .5f, Random.value*10-5 );        
 			Instantiate (Worker, startingPosition, Quaternion.identity);
+			u.sheep++;
+			u.updateCountText ("Sheep");
 		}
 
 		//Predator Starts far away (20+1d20 in both x and z)
-		startingPosition = new Vector3(Random.value*20, 1f, Random.value*20);        
+		startingPosition = new Vector3(Random.value*20+20, 1f, Random.value*20+20);        
 		Instantiate(Predator, startingPosition, Quaternion.identity);
+		u.wolves++;
+		u.updateCountText ("Wolf");
 
 		//Number of grass patches to explore = foodTotal^2
 		foodTotal = u.getGridSize(); //(e.g. 50 x 50matrix)
@@ -56,9 +81,11 @@ public class StartScript : MonoBehaviour {
 				fb.foodValue = Random.value * 50f;
 				u.setGridValue(i+gridOrigin, j+gridOrigin, fb.foodValue);
 				u.foodCount++;
-
 			}
         }
+		u.updateCountText ("Food");
+
+//		u.dumpData ();
     }
 	
 	// Update is called once per frame

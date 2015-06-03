@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11420414}
   m_Layer: 0
   m_Name: Sheep
-  m_TagString: Untagged
+  m_TagString: Gatherer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,6 +96,7 @@ MonoBehaviour:
   afraidFlag: 0
   maxRunAwaySteps: 0
   runAwaySteps: 0
+  tickCheck: 29
 --- !u!135 &13539072
 SphereCollider:
   m_ObjectHideFlags: 1

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System;
 
@@ -13,7 +14,45 @@ public class universalScripts {
 	private DateTime startTime;
 	private int currentTime;
 	public int foodCount;
+	public int wolves;
+	public int sheep;
+	public int total;
+	public Text wcount;
+	public Text scount;
+	public Text tcount;
+	public Text fcount;
 
+
+	public void updateCountText(string countType)
+	{
+		switch (countType)
+		{
+			case "Wolf":
+				wcount.text = wolves.ToString ();
+				break;
+			case "Sheep":
+				scount.text = sheep.ToString ();
+				break;
+			case "Food":
+				fcount.text = foodCount.ToString ();
+				break;
+			default:			
+				break;
+		}
+
+		int total = wolves + sheep + foodCount;
+		tcount.text = total.ToString ();
+	}
+
+
+
+	public void dumpData(){
+	
+		Debug.Log ("W"+wcount.text);
+		Debug.Log ("S"+scount.text);
+		Debug.Log ("F"+fcount.text);
+
+	}
 
 	//singleton constructor
 	private static universalScripts INSTANCE = new universalScripts();

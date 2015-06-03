@@ -23,6 +23,7 @@ public class aliveBehaviors : MonoBehaviour {
 	//the amount of food that can be stored, above the creatures personal resources
 	public float currentCapacity;
 	public float maximumCapacity;
+	private universalScripts u = universalScripts.getInstance();
 
 	// Use this for initialization
 	void Start () {
@@ -54,7 +55,6 @@ public class aliveBehaviors : MonoBehaviour {
 				currentResources += eatAmount;
 			} 
 		}
-		isHungry = hungryCheck ();
 	}
 
 	public void consumeResources(int factor)
@@ -65,28 +65,26 @@ public class aliveBehaviors : MonoBehaviour {
 
 	public void starvingCheck(){
 
-		if (currentResources < 0) {
-			currentHealth -= (maximumHealth / 20);
+		if (currentResources < 0) 
+		{
+			currentHealth = currentHealth -(maximumHealth / 20);
 			isStarving = true;
-		} else
+		} 
+		else
 			isStarving = false;
 	}
 
 	public void healthCheck(){
-		if (currentHealth <= 0)
+		if (currentHealth <= 0) {
+			u.sheep--;
+			u.updateCountText("Sheep");
 			Destroy (gameObject);
+		}
+
 	}
 
-	// Update is called once per frame
+	/*
 	public void Update () {
-
-	/*	ageCreature();
-		consumeResources();
-		eatFood();
-		hungryCheck ();
-		starvingCheck ();
-		healthCheck ();
-		*/
-	
 	}
+	*/
 }

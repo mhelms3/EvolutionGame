@@ -21,10 +21,10 @@ public class gathererScript : moveBehaviors {
 	// Use this for initialization
 	void Start () {
 		//move stuff
-		senseDistance = 4;
+		senseDistance = 6;
 		speed = 8f;
 		maxWanderSteps = 30;
-		maxRunAwaySteps = 100;
+		maxRunAwaySteps = 200;
 
 		wanderTarget = setNewCourse (transform.position);	//sets WanderTarget relative to where this object was instantiated	
 
@@ -36,14 +36,16 @@ public class gathererScript : moveBehaviors {
 		currentHealth = 10;
 		currentAge = 0;
 		maximumAge = 20;
-		rateOfAge = .002f;
+		rateOfAge = .01f;
 		currentResources = 20; 
 		maximumResources = 20; 
-		resourceRequirement = .02f;
+		resourceRequirement = .04f;
 		currentCapacity = 0;
 		maximumCapacity = 5;
+
 	}
 		
+
 	private void eatObject (GameObject food)
 	{		
 		eatTarget = food.GetComponent("foodBehavior")as foodBehavior;
@@ -51,8 +53,7 @@ public class gathererScript : moveBehaviors {
 		currentCapacity += harvestSpeed;
 		if (eatTarget.foodValue < 1) 
 		{
-			u.foodCount--;
-			Destroy(food);
+			eatTarget.killFlag = true;
 		}
 		else
 			eatTarget.changeColor (false);
@@ -132,7 +133,7 @@ public class gathererScript : moveBehaviors {
 			{
 				distanceToTarget = getTargetDistance(target.transform.position);
 				if (distanceToTarget < .25)
-				{
+				{		
 					eatObject(target);
 					bounceObject();
 				}
