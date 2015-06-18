@@ -39,12 +39,12 @@ MeshRenderer:
   m_GameObject: {fileID: 115026}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_Materials:
   - {fileID: 2100000, guid: e00c7abb20189ea41a12b3e7b86243a2, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
+  m_UseLightProbes: 0
   m_ReflectionProbeUsage: 1
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
@@ -80,6 +80,12 @@ MonoBehaviour:
   rateOfAge: 0
   maturityAge: 0
   isBaby: 0
+  isFemale: 0
+  wantsToMate: 0
+  hasMate: 0
+  isPregnant: 0
+  lengthOfPregnancy: 0
+  increasedConsumption: 0
   currentResources: 0
   maximumResources: 0
   resourceRequirement: 0
@@ -94,12 +100,15 @@ MonoBehaviour:
   upFlag: 1
   wanderSteps: 0
   maxWanderSteps: 0
+  isWandering: 0
   sizeOfSpace: 50
   wanderTarget: {x: 0, y: 0, z: 0}
   afraidFlag: 0
   maxRunAwaySteps: 0
   runAwaySteps: 0
+  wanderFood: 0
   AdultWorker: {fileID: 103150, guid: 74c70bdc4f60c3c42918d55dc60f34cc, type: 2}
+  BabySheep: {fileID: 0}
 --- !u!135 &13506232
 SphereCollider:
   m_ObjectHideFlags: 1

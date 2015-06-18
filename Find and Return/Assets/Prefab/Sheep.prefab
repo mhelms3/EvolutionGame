@@ -80,6 +80,12 @@ MonoBehaviour:
   rateOfAge: 0
   maturityAge: 0
   isBaby: 0
+  isFemale: 0
+  wantsToMate: 0
+  hasMate: 0
+  isPregnant: 0
+  lengthOfPregnancy: 0
+  increasedConsumption: 0
   currentResources: 0
   maximumResources: 0
   resourceRequirement: 0
@@ -94,12 +100,15 @@ MonoBehaviour:
   upFlag: 1
   wanderSteps: 0
   maxWanderSteps: 0
+  isWandering: 0
   sizeOfSpace: 50
   wanderTarget: {x: 0, y: 0, z: 0}
   afraidFlag: 0
   maxRunAwaySteps: 0
   runAwaySteps: 0
+  wanderFood: 0
   AdultWorker: {fileID: 103150}
+  BabySheep: {fileID: 115026, guid: 5076f1e3e8903e844a5aafe942c09952, type: 2}
 --- !u!135 &13539072
 SphereCollider:
   m_ObjectHideFlags: 1

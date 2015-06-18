@@ -18,6 +18,7 @@ public class universalScripts {
 
 	public int sheep;
 	public int babySheep;
+	public double percentFemale;
 
 	public int sheepStarve;
 	public int sheepMature;
@@ -33,6 +34,9 @@ public class universalScripts {
 	public Text starveSheepCount;
 	public Text tcount;
 	public Text fcount;
+
+	public float multiX = 20;
+
 
 
 	public void updateCountText(string countType)
@@ -82,7 +86,7 @@ public class universalScripts {
 	//private contructor
 	private universalScripts() {
 		gridSize = 50;
-		platformSize = 100;
+		platformSize = 75;
 		grassGrid = new float[platformSize, platformSize];
 		initializeGrassGrid ();
 		ticker = 0;

@@ -13,6 +13,17 @@ public class aliveBehaviors : MonoBehaviour {
 	public float rateOfAge;
 	public float maturityAge;
 	public bool isBaby;
+	public bool isFemale;
+
+	//for mating behaviors
+	public bool wantsToMate = false;
+	public bool hasMate = false;
+	public bool isPregnant = false;
+	//for mating behaviors
+	public float lengthOfPregnancy; //set at lower level
+	public float increasedConsumption; //set at lower level
+
+
 
 	//current and maximum level of "resource energy" that the creature maintains for its health
 	//if current goes below 0, creature begins to starve (takes HP damage)
@@ -33,6 +44,15 @@ public class aliveBehaviors : MonoBehaviour {
 
 	}
 
+	public void assignGender()
+	{
+		float genderFemale = Random.value;
+		if (genderFemale < u.percentFemale)
+			isFemale = true;
+		else
+			isFemale = false;
+	}
+
 	public void ageCreature(int factor){
 		//age
 
@@ -46,7 +66,7 @@ public class aliveBehaviors : MonoBehaviour {
 	}
 
 	public bool hungryCheck(){
-		if (currentResources  < (maximumResources*0.6f)) 
+		if (currentResources  < (maximumResources*0.8f)) 
 			return(true);
 		else
 			return(false);

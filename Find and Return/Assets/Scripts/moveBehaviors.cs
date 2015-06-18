@@ -10,11 +10,13 @@ public class moveBehaviors : aliveBehaviors {
 	public  bool upFlag = true;
 	public  int wanderSteps = 0;
 	public  int maxWanderSteps;
+	public 	bool isWandering = false;
 	public  float sizeOfSpace;
 	public  Vector3 wanderTarget;
 	public  bool afraidFlag = false;
 	public  int maxRunAwaySteps;
 	public  int runAwaySteps = 0;
+	public  bool wanderFood = false;
 
 	private universalScripts u = universalScripts.getInstance();
 	// Use this for initialization
@@ -51,7 +53,41 @@ public class moveBehaviors : aliveBehaviors {
 		}
 		
 	}
-	
+
+	public GameObject findClosestMate (string targetTag, bool isFemale)
+	{
+		GameObject[] gObjs;
+		gObjs = GameObject.FindGameObjectsWithTag(targetTag);    
+		int returnLength = gObjs.GetLength(0);
+		if (returnLength > 0) {
+			GameObject closestObject = null;
+			float dist = Mathf.Infinity;
+			Vector3 thisPosition = transform.position;
+			aliveBehaviors aliveTarget;
+			
+			foreach (GameObject gObj in gObjs) {
+				Vector3 diff = gObj.transform.position - thisPosition;
+				float curDistance = diff.sqrMagnitude;            
+				if (curDistance < dist) 
+				{
+					aliveTarget = gObj.GetComponent ("aliveBehaviors") as aliveBehaviors;
+					//Debug.Log ("Dist:"+curDistance+" X:"+gObj.transform.position.x+" Z:"+gObj.transform.position.z);
+					//Debug.Log ("isFemale:"+aliveTarget.isFemale+" toMate:"+aliveTarget.wantsToMate +" iAmGender"+isFemale);
+					if ((aliveTarget.isFemale != isFemale) && (aliveTarget.wantsToMate) && (!aliveTarget.hasMate))
+					{
+						closestObject = gObj;
+						dist = curDistance;
+						//Debug.Log ("closest Dist:"+dist);
+					}
+				}
+			}        
+			return (closestObject);
+		} else {
+			//Debug.Log ("Null Error:" + targetTag + ":" + returnLength);
+			return(null);
+		}
+	}
+
 	public GameObject findClosestObject(string targetTag)
 	{
 		GameObject[] gObjs;
@@ -104,20 +140,20 @@ public class moveBehaviors : aliveBehaviors {
 	
 	public float pullBack (float n)
 	{
-		if (n > sizeOfSpace-5)
-			return (sizeOfSpace-10);
-		else if (n < -sizeOfSpace+5)
-			return(-sizeOfSpace+10);
+		if (n > sizeOfSpace-10)
+			return (sizeOfSpace-15);
+		else if (n < -sizeOfSpace+10)
+			return(-sizeOfSpace+15);
 		else
 			return(n);
 	}
 	
 	public Vector3 setNewCourse(Vector3 currentTarget)
 	{
-		currentTarget.x += (Random.value * 24f) - 12f;
-		currentTarget.z += (Random.value * 24f) - 12f;
-		currentTarget.x = pullBack (currentTarget.x+(Random.value * 24f) - 12f);
-		currentTarget.z = pullBack (currentTarget.z+(Random.value * 24f) - 12f);
+		//currentTarget.x += (Random.value * 30f) - 15f;
+		//currentTarget.z += (Random.value * 30f) - 15f;
+		currentTarget.x = pullBack (currentTarget.x+(Random.value * 50f) - 25f);
+		currentTarget.z = pullBack (currentTarget.z+(Random.value * 50f) - 25f);
 		return (currentTarget);
 	}
 	
@@ -125,11 +161,21 @@ public class moveBehaviors : aliveBehaviors {
 	{
 		wanderSteps++;
 		float wanderTargetDistance = getTargetDistance(wanderTarget);
-		if (wanderSteps > maxWanderSteps || wanderTargetDistance < .25f) {
+		if (wanderTargetDistance < .25f) 
+		{
+			wanderTarget = setNewCourse (transform.position);
+		} 
+		else if (wanderSteps > maxWanderSteps)
+		{
 			wanderTarget = setNewCourse (transform.position);
 			wanderSteps = 0;
-		} else
+			isWandering = false;
+			wanderFood = true;
+		}
+		else 
+		{	
 			moveToTarget (wanderTarget);
+		}
 	}
 	
 	public void runAway(Vector3 avoidTarget)

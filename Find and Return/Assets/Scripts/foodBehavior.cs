@@ -43,12 +43,13 @@ public class foodBehavior : MonoBehaviour {
 
 		changeColor (false);
 
-		maxFoodValue = 50;
-		growthRate = .05f;
+		maxFoodValue = 100;
+		growthRate = .05f*u.multiX;
 		seedRange = 5;
 		seedNumber = 1;
-		seedSurvival = .2f;
-		seedCost = seedRange * seedNumber * seedSurvival* 15;
+		seedSurvival = .5f;
+		//seedCost = seedRange * seedNumber * seedSurvival* 15;
+		seedCost = 25;
 		seedRequirement = seedCost*3;
 
 	}

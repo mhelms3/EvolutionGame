@@ -52,6 +52,7 @@ public class StartScript : MonoBehaviour {
 		u.total = 0;
 
 		u.babySheep = 0;
+		u.percentFemale = .50;
 		
 		u.sheepStarve =0;
 		u.sheepMature =0;
@@ -78,6 +79,11 @@ public class StartScript : MonoBehaviour {
 			newAdultWorker = Instantiate<GameObject> (Worker);
 			newAdultWorker.transform.position = startingPosition;
 			gsWorker = newAdultWorker.GetComponent ("gathererScript") as gathererScript;
+			gsWorker.assignGender();
+			gsWorker.genderColor ();
+
+
+
 			gsWorker.setAdult ();
 			u.sheep++;
 			u.updateCountText ("Sheep");
@@ -91,7 +97,7 @@ public class StartScript : MonoBehaviour {
 
 		//Number of grass patches to explore = foodTotal^2
 		foodTotal = u.getGridSize(); //(e.g. 50 x 50matrix)
-		foodPercentage = .25f; //percent of explored grid units to have a grass patch 
+		foodPercentage = .1f; //percent of explored grid units to have a grass patch 
 		spread = foodTotal / 2;
 		int gridOrigin = Mathf.RoundToInt(u.getPlatformSize() / 2 - u.getGridSize()/2);
 
