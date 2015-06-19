@@ -12,10 +12,10 @@ public class gathererScript : moveBehaviors {
 	private baseBehavior baseTarget;
 	private float harvestSpeed;
 	private int tick = 0;
-
+	//private GameObject mateTarget;
 	private GameObject nearBase;
 	private GameObject target;
-	private GameObject mateTarget;
+
 
 
 
@@ -27,6 +27,7 @@ public class gathererScript : moveBehaviors {
 	// Use this for initialization
 	void Awake () {
 		//move stuff
+		unitType = "Sheep";
 		harvestSpeed = 0.1f * u.multiX;
 		senseDistance = 3;
 		speed = 4f * u.multiX;
@@ -44,28 +45,30 @@ public class gathererScript : moveBehaviors {
 		maximumHealth = 5;
 		currentHealth = 5;
 		currentAge = 0;
-		maximumAge = 20;
+		maximumAge = 25;
 		rateOfAge = .01f* u.multiX;
-		currentResources = 5; 
-		maximumResources = 5; 
+		currentResources = 2; 
+		maximumResources = 12; 
 		resourceRequirement = .02f * u.multiX;
-		//resourceRequirement = .2f;
+		//resourceRequirement = 2f;
 		currentCapacity = 0;
-		maximumCapacity = 2;
+		maximumCapacity = 4;
 
 		//childhood behavior
 		isBaby = true;
-		maturityAge = 5;
+		maturityAge = 4;
 
 		//mating behavior
-		lengthOfPregnancy = 90f; 
-		increasedConsumption = 2.2f; 
+		lengthOfPregnancy = 999f; 
+		increasedConsumption = 999f; 
+
 	
 
 	}
 
 	public void setAdult()
 	{
+
 		senseDistance = 6;
 		speed = 8f* u.multiX;
 		maxRunAwaySteps = 200;		
@@ -73,14 +76,17 @@ public class gathererScript : moveBehaviors {
 		//alive stuff
 		maximumHealth = 20;
 		currentHealth = 20;
-		currentResources = 10; 
-		maximumResources = 20; 
+		currentResources = 12; 
+		maximumResources = 24; 
 		//resourceRequirement = .4f;
-		resourceRequirement = .04f* u.multiX;
+		resourceRequirement = .06f* u.multiX;
 		currentCapacity = 0;
-		maximumCapacity = 5;
+		maximumCapacity = 6;
 		isBaby = false;
 		maturityAge = 999;
+		//mating behavior
+		lengthOfPregnancy = 90f; 
+		increasedConsumption = 2.2f; 
 
 	}
 
@@ -127,8 +133,8 @@ public class gathererScript : moveBehaviors {
 		{
 			eatTarget.killFlag = true;
 		}
-		else
-			eatTarget.changeColor (false);
+		//else
+			//eatTarget.changeColor ();
 	}
 
 	private GameObject predatorCheck()
@@ -151,25 +157,7 @@ public class gathererScript : moveBehaviors {
 
 	}
 
-	private void coupleMates(GameObject mate)
-	{
-		hasMate = true;
-		mateTarget = mate;
-		gathererScript gathererTarget = mate.GetComponent ("gathererScript") as gathererScript;
-		gathererTarget.hasMate = true;
-		gathererTarget.mateTarget = gameObject;
-	}
 
-	private void decoupleMates (GameObject mate)
-	{
-		hasMate = false;
-		wantsToMate = false;
-		mateTarget = null;
-		gathererScript gathererTarget = mate.GetComponent ("gathererScript") as gathererScript;
-		gathererTarget.hasMate = false;
-		gathererTarget.mateTarget = null;
-		gathererTarget.wantsToMate = false;
-	}
 
 	private void dropMateResources (GameObject mate)
 	{
@@ -195,6 +183,79 @@ public class gathererScript : moveBehaviors {
 
 	}
 
+	private void matingBehavior ()
+	{
+		float distanceToMate = 0;
+		if (hasMate)
+		{
+			if (mateTarget == null)
+			{
+				Debug.Log ("ERROR: hasMate true, mateTarget == null)");
+				getFood();
+			}
+			else
+			{
+				distanceToMate = getTargetDistance (mateTarget.transform.position);
+				if (distanceToMate < .25) 
+				{		
+					spawnBaby();
+				} 
+				else 			
+					moveToTarget (mateTarget.transform.position);
+				
+			}
+		}
+		
+		
+		else if (mateTarget != null) 
+		{
+			Debug.Log ("ERROR: hasMate False, but mateTarget not null");
+			hasMate = true;
+			getFood ();
+		}
+		else
+		{
+			GameObject tempMateTarget = findClosestMate ("Gatherer", isFemale);
+			if (tempMateTarget != null) 
+			{
+				distanceToMate = getTargetDistance (tempMateTarget.transform.position);
+				if (distanceToMate < senseDistance)
+					coupleMates(tempMateTarget);
+				else
+					getFood ();
+			}
+			else
+				getFood ();
+		}
+	
+	}
+
+
+	private void gotoBase()
+	{
+		if (nearBase==null)
+			nearBase = findClosestObject("Base");
+		else
+		{
+			distanceToTarget = getTargetDistance(nearBase.transform.position);
+			if (distanceToTarget < .5)
+			{
+				baseTarget = nearBase.GetComponent("baseBehavior")as baseBehavior;
+				baseTarget.resourceFood += currentCapacity;
+				currentCapacity = 0;
+				returnFlag = false;
+			}
+			else if (distanceToTarget > senseDistance)
+			{
+				nearBase = findClosestObject("Base");
+				moveToTarget(nearBase.transform.position);
+			}
+			else
+				moveToTarget(nearBase.transform.position);
+		}
+	}
+
+
 	private void getFood()
 	{
 
@@ -202,10 +263,9 @@ public class gathererScript : moveBehaviors {
 		if (u.foodCount < 1)
 			Application.Quit ();
 
-		//if not hungry, then wander
+		//if not hungry, then wander for a bit
 		else if (isHungry == false) 
 		{
-			//Debug.Log ("Not Hungry -> Wander");
 			isWandering = true;
 			wander ();
 		}
@@ -237,9 +297,7 @@ public class gathererScript : moveBehaviors {
 					target = findClosestObject("Food");
 					isWandering = true;
 					wander(); 
-					//Debug.Log ("No Food Nearby -> Wander");
-					//add some trail, and check for trail stuff here						
-					//add some repulsers for predators and for death spots
+
 				}
 			}
 			/*
@@ -256,7 +314,7 @@ public class gathererScript : moveBehaviors {
 	void Update () 
 	{
 
-		float distanceToMate = 0;
+
 		ageCreature (1);
 
 		if ((currentAge > maturityAge) && (isBaby) && (!killFlag)) {
@@ -274,7 +332,7 @@ public class gathererScript : moveBehaviors {
 		GameObject predatorTarget = predatorCheck ();
 
 
-		//BEHAVIOR PRIORITY: 1. run away from predator, 2. mate, 3. eat, 4. wander
+		//BEHAVIOR PRIORITY: 1. run away from predator (if afraid), 2. wander(if wandering), 3. mate (if wantsToMate), 4. eat (if hungry), 5. initiate wander
 
 		if (predatorTarget != null && afraidFlag==false) 
 		{
@@ -291,83 +349,13 @@ public class gathererScript : moveBehaviors {
 
 		/*
 		else if (returnFlag)
-		{
-			if (nearBase==null)
-				nearBase = findClosestObject("Base");
-			else
-			{
-				distanceToTarget = getTargetDistance(nearBase.transform.position);
-				if (distanceToTarget < .5)
-				{
-					baseTarget = nearBase.GetComponent("baseBehavior")as baseBehavior;
-					baseTarget.resourceFood += currentCapacity;
-					currentCapacity = 0;
-					returnFlag = false;
-				}
-				else if (distanceToTarget > senseDistance)
-				{
-					nearBase = findClosestObject("Base");
-					moveToTarget(nearBase.transform.position);
-				}
-				else
-					moveToTarget(nearBase.transform.position);
-			}
-
-		}
+			gotoBase();
 		*/
 		else if (isWandering)
 			wander ();
-
 		else if (wantsToMate) 
-		{
-			if (hasMate)
-			{
-				if (mateTarget == null)
-				{
-					Debug.Log ("ERROR: hasMate true, mateTarget == null)");
-					getFood();
-				}
-				else
-				{
-					distanceToMate = getTargetDistance (mateTarget.transform.position);
-					if (distanceToMate < .25) 
-					{		
-						spawnBaby();
-
-					} 
-					else 			
-						moveToTarget (mateTarget.transform.position);
-
-				}
-			}
-			
-
-			else if (mateTarget != null) 
-			{
-				Debug.Log ("ERROR: hasMate False, but mateTarget not null");
-				hasMate = true;
-				getFood ();
-			}
-			else
-			{
-				GameObject tempMateTarget = findClosestMate ("Gatherer", isFemale);
-				if (tempMateTarget != null) 
-				{
-					distanceToMate = getTargetDistance (tempMateTarget.transform.position);
-					if (distanceToMate < senseDistance)
-						coupleMates(tempMateTarget);
-					else
-						getFood ();
-				}
-				else
-					getFood ();
-			}
-
-		} 
-
+			matingBehavior();
 		else 
-		{
 			getFood ();
-		}        
 	}
 }

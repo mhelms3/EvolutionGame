@@ -49,12 +49,10 @@
      <Compile Include="Assets\Scripts\StartScript.cs" />
      <Compile Include="Assets\Scripts\aliveBehaviors.cs" />
      <Compile Include="Assets\Scripts\baseBehavior.cs" />
-     <Compile Include="Assets\Scripts\createGatherer.cs" />
      <Compile Include="Assets\Scripts\foodBehavior.cs" />
      <Compile Include="Assets\Scripts\gathererScript.cs" />
      <Compile Include="Assets\Scripts\moveBehaviors.cs" />
      <Compile Include="Assets\Scripts\predatorBehavior.cs" />
-     <Compile Include="Assets\Scripts\rotatePill.cs" />
      <Compile Include="Assets\Scripts\scrollCamera.cs" />
      <Compile Include="Assets\Scripts\universalScripts.cs" />
  <Reference Include="UnityEngine.UI">

@@ -137,23 +137,18 @@ public class moveBehaviors : aliveBehaviors {
 		float step = -speed * Time.deltaTime;
 		transform.position = Vector3.MoveTowards(transform.position, tempTarget, step);
 	}
-	
-	public float pullBack (float n)
-	{
-		if (n > sizeOfSpace-10)
-			return (sizeOfSpace-15);
-		else if (n < -sizeOfSpace+10)
-			return(-sizeOfSpace+15);
-		else
-			return(n);
-	}
+
+
+
 	
 	public Vector3 setNewCourse(Vector3 currentTarget)
 	{
-		//currentTarget.x += (Random.value * 30f) - 15f;
-		//currentTarget.z += (Random.value * 30f) - 15f;
-		currentTarget.x = pullBack (currentTarget.x+(Random.value * 50f) - 25f);
-		currentTarget.z = pullBack (currentTarget.z+(Random.value * 50f) - 25f);
+		float maxWanderDist = .10f*u.getPlatformSize();
+		currentTarget.x += (Random.value * maxWanderDist) - (maxWanderDist / 2);
+		currentTarget.z += (Random.value * maxWanderDist) - (maxWanderDist / 2);
+		currentTarget.x = u.pullBackPosition (currentTarget.x, u.getPlatformSize()/2);
+		currentTarget.z = u.pullBackPosition (currentTarget.z, u.getPlatformSize()/2);
+		currentTarget.y = 0.5f;
 		return (currentTarget);
 	}
 	
@@ -161,7 +156,7 @@ public class moveBehaviors : aliveBehaviors {
 	{
 		wanderSteps++;
 		float wanderTargetDistance = getTargetDistance(wanderTarget);
-		if (wanderTargetDistance < .25f) 
+		if (wanderTargetDistance < .5f) 
 		{
 			wanderTarget = setNewCourse (transform.position);
 		} 

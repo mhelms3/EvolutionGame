@@ -8,7 +8,7 @@ using System;
 public class universalScripts {
 
 	private float[,] grassGrid;
-	private int gridSize;
+	//private int gridSize;
 	private int platformSize;
 	private int ticker;
 	private DateTime startTime;
@@ -35,7 +35,7 @@ public class universalScripts {
 	public Text tcount;
 	public Text fcount;
 
-	public float multiX = 20;
+	public float multiX = 10;
 
 
 
@@ -85,8 +85,8 @@ public class universalScripts {
 
 	//private contructor
 	private universalScripts() {
-		gridSize = 50;
-		platformSize = 75;
+		//gridSize = 35;
+		platformSize = 60;
 		grassGrid = new float[platformSize, platformSize];
 		initializeGrassGrid ();
 		ticker = 0;
@@ -102,6 +102,26 @@ public class universalScripts {
 	//API gets and sets
 	public float[,] getGrid() {
 		return grassGrid;
+	}
+
+	public int pullBackGrid (int n, int edge)
+	{
+		if (n >edge)
+			return (edge);
+		else if (n < 0)
+			return(0);
+		else
+			return(n);
+	}
+
+	public float pullBackPosition (float n, float edge)
+	{
+		if (n > edge)
+			return (.95f*edge);
+		else if (n < -edge)
+			return(-.95f*edge);
+		else
+			return(n);
 	}
 
 	public float getGridValue(int i, int j) {
@@ -122,10 +142,6 @@ public class universalScripts {
 
 	public int getTicker(){
 		return (ticker);
-	}
-
-	public int getGridSize(){
-		return (gridSize);
 	}
 
 	public int getPlatformSize(){

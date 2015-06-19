@@ -3,6 +3,8 @@ using System.Collections;
 
 public class aliveBehaviors : MonoBehaviour {
 
+	public string unitType;
+
 	//current and maximum health - death if 0
 	public float currentHealth;
 	public float maximumHealth;
@@ -19,6 +21,7 @@ public class aliveBehaviors : MonoBehaviour {
 	public bool wantsToMate = false;
 	public bool hasMate = false;
 	public bool isPregnant = false;
+	public GameObject mateTarget;
 	//for mating behaviors
 	public float lengthOfPregnancy; //set at lower level
 	public float increasedConsumption; //set at lower level
@@ -110,15 +113,40 @@ public class aliveBehaviors : MonoBehaviour {
 
 	}
 
+	public void coupleMates(GameObject mate)
+	{
+		hasMate = true;
+		mateTarget = mate;
+		aliveBehaviors aliveTarget = mate.GetComponent ("aliveBehaviors") as aliveBehaviors;
+		aliveTarget.hasMate = true;
+		aliveTarget.mateTarget = gameObject;
+	}
+	
+	public void decoupleMates (GameObject mate)
+	{
+		hasMate = false;
+		wantsToMate = false;
+		mateTarget = null;
+		aliveBehaviors aliveTarget = mate.GetComponent ("aliveBehaviors") as aliveBehaviors;
+		aliveTarget.hasMate = false;
+		aliveTarget.mateTarget = null;
+		aliveTarget.wantsToMate = false;
+	}
+
 	public void killUnit()
 	{
-		if (isBaby)
-			u.babySheep--;
-		else
-			u.sheep--;
+		if (hasMate)
+			decoupleMates (mateTarget);
 
-			u.updateCountText("Sheep");
+		if (unitType == "Sheep") 
+		{
+			if (isBaby)
+				u.babySheep--;
+			else
+				u.sheep--;
+			u.updateCountText ("Sheep");
 			DestroyImmediate (gameObject);
+		}
 	}
 
 
