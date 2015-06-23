@@ -12,6 +12,7 @@ GameObject:
   - 65: {fileID: 6559594}
   - 23: {fileID: 2330520}
   - 114: {fileID: 11472090}
+  - 65: {fileID: 6518692}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -62,6 +63,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 103706}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &6518692
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 103706}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6559594
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -88,7 +101,6 @@ MonoBehaviour:
   resourceFood: 0
   newGathererAmount: 0
   foodIncrement: 0
-  BabySheep: {fileID: 115026, guid: 5076f1e3e8903e844a5aafe942c09952, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

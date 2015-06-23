@@ -88,6 +88,62 @@ public class moveBehaviors : aliveBehaviors {
 		}
 	}
 
+
+	public GameObject findClosestMateWithinX (string targetTag, float distance, bool isFemale)
+	{
+		GameObject[] gobj;
+		Vector3 thisPosition = transform.position;
+		Collider[] closeObjects;
+		aliveBehaviors aliveTarget;
+		closeObjects = Physics.OverlapSphere (thisPosition, distance);
+		int numObjects = closeObjects.GetLength(0);
+
+		if (numObjects > 0) {
+			GameObject closestObject = null;
+			float dist = Mathf.Infinity;
+			foreach (Collider closeObj in closeObjects) {
+				Vector3 diff = closeObj.transform.position - thisPosition;
+				float curDistance = diff.sqrMagnitude;            
+				if ((curDistance < dist) && (closeObj.tag == targetTag)) {
+					aliveTarget = closeObj.GetComponent ("aliveBehaviors") as aliveBehaviors;
+					if ((aliveTarget.isFemale != isFemale) && (aliveTarget.wantsToMate) && (!aliveTarget.hasMate))
+					{
+						closestObject = closeObj.gameObject;
+						dist = curDistance;
+					}
+				}
+			}
+			return(closestObject);
+		} else
+			return(null);
+	}
+
+
+	public GameObject findClosestObjectWithinX (string targetTag, float distance)
+	{
+		GameObject[] gobj;
+		Vector3 thisPosition = transform.position;
+		Collider[] closeObjects;
+		closeObjects = Physics.OverlapSphere (thisPosition, distance);
+		int numObjects = closeObjects.GetLength(0);
+		
+		if (numObjects > 0) {
+			GameObject closestObject = null;
+			float dist = Mathf.Infinity;
+			foreach (Collider closeObj in closeObjects) {
+				Vector3 diff = closeObj.transform.position - thisPosition;
+				float curDistance = diff.sqrMagnitude;            
+				if ((curDistance < dist) && (closeObj.tag == targetTag)) {
+					closestObject = closeObj.gameObject;
+					dist = curDistance;
+				}
+			}
+			return(closestObject);
+		} else
+			return(null);
+	}
+
+
 	public GameObject findClosestObject(string targetTag)
 	{
 		GameObject[] gObjs;

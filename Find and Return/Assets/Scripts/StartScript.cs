@@ -31,55 +31,76 @@ public class StartScript : MonoBehaviour {
 
 	private universalScripts u = universalScripts.getInstance();
 
-
-
-
-
-    // Use this for initialization
-    void Start()
-    {
-		GameObject newAdultWorker;
-		gathererScript gsWorker;
-        //Instantiate(Base);
-		universalScripts u = universalScripts.getInstance();
-	    
-		//gathererScript newAdultWorker;
-
-
+	private void initializeVariables()
+	{
 		u.wolves = 0;
 		u.sheep = 0;
 		u.foodCount = 0;
 		u.total = 0;
-
+		
 		u.babySheep = 0;
 		u.percentFemale = .50;
 		
 		u.sheepStarve =0;
 		u.sheepMature =0;
 		u.sheepAge =0;
+	}
 
+	private void initializeDisplayVariables()
+	{
 		u.scount = sheepCountDisplay;
 		u.babySheepCount = babySheepCountDisplay;
 		u.totalSheepCount = totalSheepCountDisplay;
-
+		
 		u.fcount = foodCountDisplay;
 		u.tcount = totalCountDisplay;
 		u.wcount = wolfCountDisplay;
-
+		
 		u.ageSheepCount= sheepAgeCountDisplay;
 		u.matureSheepCount = sheepMatureCountDisplay;
 		u.starveSheepCount = sheepStarveCountDisplay;
+	}
 
-		//u.dumpData ();
+	private void initializeFoodGrid()
+	{
+		//Number of grass patches to explore = foodTotal^2
+		foodTotal = u.getPlatformSize(); //(e.g. 50 x 50matrix)
+		foodPercentage = .1f; //percent of explored grid units to have a grass patch 
+		spread = Mathf.RoundToInt(u.getPlatformSize() / 2);
+		
+		
+		for (int i = 0; i < foodTotal; i++)
+			for (int j = 0; j < foodTotal; j++)
+		{
+			if (Random.value<foodPercentage)
+			{
+				//startingPosition = new Vector3((Random.value * spread)-spread/2*1f, .05f, (Random.value * spread)-spread/2 *1f);
+				startingPosition = new Vector3(i-spread, .1f, j-spread);
+				GameObject grass = Instantiate<GameObject>(Grass);
+				grass.transform.position = startingPosition;
+				fb = grass .GetComponent("foodBehavior")as foodBehavior;
+				fb.foodValue = Random.value * 50f;
+				fb.gridXPos = i;
+				fb.gridZPos = j;
+				u.setGridValue(i, j, fb.foodValue);
+				u.foodCount++;
+			}
+		}
+		u.updateCountText ("Food");
+	}
 
+	private void initializeGatherers()
+	{
 		//SHEEP
+		GameObject newGatherer;
+		gathererScript gsWorker;
 		startingSheep = 12; //must be at least 2
-
+		
 		for (int k = 0; k<startingSheep; k++) {
-			startingPosition = new Vector3 (Random.value*10-5, .5f, Random.value*10-5 );        
-			newAdultWorker = Instantiate<GameObject> (Worker);
-			newAdultWorker.transform.position = startingPosition;
-			gsWorker = newAdultWorker.GetComponent ("gathererScript") as gathererScript;
+			startingPosition = new Vector3 (Random.value*20-10, .5f, Random.value*20-10 );        
+			newGatherer = Instantiate<GameObject> (Worker);
+			newGatherer.transform.position = startingPosition;
+			gsWorker = newGatherer.GetComponent ("gathererScript") as gathererScript;
 			gsWorker.assignGender();
 			//guarantee one male and one female
 			if (k == 0) gsWorker.isFemale = true;
@@ -89,51 +110,42 @@ public class StartScript : MonoBehaviour {
 			u.sheep++;
 			u.updateCountText ("Sheep");
 		}
+	}
 
+	private void initializePredators()
+	{
 		//PREDATOR
 		//float startX = (float)(Random.value * u.getPlatformSize () - .5 * u.getPlatformSize ());
-		//float startZ = (float)(Random.value * u.getPlatformSize () - .5 * u.getPlatformSize ());
-
+		//float startZ = (float)(Random.value * u.getPlatformSize () - .5 * u.getPlatformSize ());		
 		float startX = (float)(u.getPlatformSize ()/2);
 		float startZ = (float)(u.getPlatformSize ()/2);
-
 		startingPosition = new Vector3(startX, 1f, startZ);        
 		Instantiate(Predator, startingPosition, Quaternion.identity);
 		u.wolves++;
 		u.updateCountText ("Wolf");
-
-		//Number of grass patches to explore = foodTotal^2
-		foodTotal = u.getPlatformSize(); //(e.g. 50 x 50matrix)
-		foodPercentage = .1f; //percent of explored grid units to have a grass patch 
-		spread = Mathf.RoundToInt(u.getPlatformSize() / 2);
+	}
 
 
-        for (int i = 0; i < foodTotal; i++)
-			for (int j = 0; j < foodTotal; j++)
-        {
-			if (Random.value<foodPercentage)
-			{
-	            //startingPosition = new Vector3((Random.value * spread)-spread/2*1f, .05f, (Random.value * spread)-spread/2 *1f);
-				startingPosition = new Vector3(i-spread, .1f, j-spread);
-	            GameObject grass = Instantiate<GameObject>(Grass);
-				grass.transform.position = startingPosition;
-				fb = grass .GetComponent("foodBehavior")as foodBehavior;
-				fb.foodValue = Random.value * 50f;
-				fb.gridXPos = i;
-				fb.gridZPos = j;
-				u.setGridValue(i, j, fb.foodValue);
-				u.foodCount++;
-			}
-        }
-		u.updateCountText ("Food");
 
-//		u.dumpData ();
-    }
+    // Use this for initialization
+    void Start()
+	{
+		universalScripts u = universalScripts.getInstance ();
+		initializeVariables ();
+		initializeDisplayVariables ();
+		initializeFoodGrid ();
+		initializeGatherers ();
+		initializePredators ();
+	
+	}
 	
 	// Update is called once per frame
 	void Update () {
 		u.incrementTicker ();
-		if (Input.GetKey("escape"))
+		if (Input.GetKeyDown("escape"))
 			Application.Quit();
+		if (Input.GetKeyDown ("space"))
+			u.isPaused = !u.isPaused;	
+
 	}
 }

@@ -61,13 +61,7 @@ public class foodBehavior : MonoBehaviour {
 		rend.material.color = green2;
 	}
 
-	public int convertPosToGrid(float p)
-	{
-		int fullPlat = u.getPlatformSize ();
-		int halfPlat = Mathf.RoundToInt (fullPlat / 2);
-		int GridPos = Mathf.RoundToInt(p) + halfPlat;
-		return(u.pullBackGrid (GridPos, fullPlat));
-	}
+
 
 
 	public void seedFood()
@@ -84,8 +78,8 @@ public class foodBehavior : MonoBehaviour {
 				xPos = u.pullBackPosition(xPos, u.getPlatformSize ()/2);
 				zPos = u.pullBackPosition(zPos, u.getPlatformSize ()/2);
 
-				int tempGridXPos = convertPosToGrid(xPos);
-				int tempGridZPos = convertPosToGrid(zPos);
+				int tempGridXPos = u.convertPosToGrid(xPos);
+				int tempGridZPos = u.convertPosToGrid(zPos);
 
 				if (u.getGridValue(tempGridXPos, tempGridZPos)==0)
 				{
@@ -116,6 +110,7 @@ public class foodBehavior : MonoBehaviour {
 	{
 		if (killFlag) {
 			u.setGridValue (gridXPos, gridZPos, 0);
+			u.setGridEaters (gridXPos, gridZPos, 0);
 			Destroy (gameObject);
 			u.foodCount--;
 			u.updateCountText ("Food");
@@ -124,14 +119,19 @@ public class foodBehavior : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		grow ();
-		//InvokeRepeating ("changeColor", .1f, 15*Time.deltaTime);
-		//changeColor(false);
+		if (!u.isPaused) {
+			grow ();
+			//InvokeRepeating ("changeColor", .1f, 15*Time.deltaTime);
+			//changeColor(false);
+		}
 	}
 
 	void LateUpdate()
 	{
-		killPlant();
+		if (!u.isPaused) {
+			killPlant ();
+
+		}
 	}
 
 }

@@ -29,12 +29,12 @@ public class baseBehavior : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		resourceFood += foodIncrement;
-
-		if (resourceFood > newGathererAmount) 
-		{
-			//spawnNewGatherer();
-			resourceFood -= newGathererAmount;
+		if (!u.isPaused) {
+			resourceFood += foodIncrement;
+			if (resourceFood > newGathererAmount) {
+				//spawnNewGatherer();
+				resourceFood -= newGathererAmount;
+			}
 		}
 	}
 }
