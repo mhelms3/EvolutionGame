@@ -22,9 +22,12 @@ public class aliveBehaviors : MonoBehaviour {
 	public bool hasMate = false;
 	public bool isPregnant = false;
 	public GameObject mateTarget;
+
 	//for mating behaviors
-	public float lengthOfPregnancy; //set at lower level
-	public float increasedConsumption; //set at lower level
+	public float lengthOfPregnancy; 
+	public float currentPregnancy =0;
+	public int  numberOfChildren =1; 
+	public float increasedConsumption;
 
 
 
@@ -42,10 +45,18 @@ public class aliveBehaviors : MonoBehaviour {
 	public float maximumCapacity;
 	private universalScripts u = universalScripts.getInstance();
 
-	// Use this for initialization
-	void Start () {
-
+	public void mateCheck()
+	{
+		
+		if ((currentHealth > .8 * maximumHealth) && (currentResources > .5 * maximumResources) && (!isBaby) && (!isPregnant))
+			wantsToMate = true;
+		
+		if ((currentHealth < .6 * maximumHealth) || (currentResources < .4 * maximumResources))
+			wantsToMate = false;
+		
 	}
+
+
 
 	public void assignGender()
 	{
@@ -69,7 +80,7 @@ public class aliveBehaviors : MonoBehaviour {
 	}
 
 	public bool hungryCheck(){
-		if (currentResources  < (maximumResources*0.8f)) 
+		if (currentResources  < (maximumResources*0.65f)) 
 			return(true);
 		else
 			return(false);
@@ -85,6 +96,7 @@ public class aliveBehaviors : MonoBehaviour {
 				currentResources += eatAmount;
 			} 
 		}
+		isHungry = hungryCheck ();
 	}
 
 	public void consumeResources(int factor)
@@ -97,7 +109,7 @@ public class aliveBehaviors : MonoBehaviour {
 
 		if (currentResources < 0) 
 		{
-			currentHealth = currentHealth -(maximumHealth / 20);
+			currentHealth = currentHealth -(maximumHealth / 40);
 			isStarving = true;
 		} 
 		else
@@ -108,8 +120,10 @@ public class aliveBehaviors : MonoBehaviour {
 		if (currentHealth <= 0) {
 			killFlag = true;
 			u.sheepStarve++;
-			u.updateCountText("Starve");
-		}
+			u.updateCountText ("Starve");
+		} else if ((currentHealth < maximumHealth) && (!isStarving))
+			currentHealth += maximumHealth * .05f;
+
 
 	}
 
@@ -138,15 +152,19 @@ public class aliveBehaviors : MonoBehaviour {
 		if (hasMate)
 			decoupleMates (mateTarget);
 
-		if (unitType == "Sheep") 
-		{
+		if (unitType == "Sheep") {
 			if (isBaby)
 				u.babySheep--;
 			else
 				u.sheep--;
 			u.updateCountText ("Sheep");
 			DestroyImmediate (gameObject);
+		} else if (unitType == "Wolf") {
+			u.wolves--;
+			u.updateCountText ("Wolf");
+			DestroyImmediate (gameObject);
 		}
+			
 	}
 
 

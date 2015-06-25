@@ -1,42 +1,42 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &170212
+--- !u!1 &101564
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 402552}
-  - 33: {fileID: 3320328}
-  - 135: {fileID: 13573862}
-  - 23: {fileID: 2343704}
-  - 114: {fileID: 11492848}
+  - 4: {fileID: 442946}
+  - 33: {fileID: 3366528}
+  - 135: {fileID: 13538712}
+  - 23: {fileID: 2316620}
+  - 114: {fileID: 11407474}
   m_Layer: 0
-  m_Name: Wolf
+  m_Name: BabyWolf
   m_TagString: Predator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &402552
+--- !u!4 &442946
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170212}
+  m_GameObject: {fileID: 101564}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: 0, y: .5, z: 0}
+  m_LocalScale: {x: 1.10000002, y: 1.10000002, z: 1.10000002}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2343704
+--- !u!23 &2316620
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170212}
+  m_GameObject: {fileID: 101564}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -55,71 +55,71 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3320328
+--- !u!33 &3366528
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170212}
+  m_GameObject: {fileID: 101564}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &11492848
+--- !u!114 &11407474
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170212}
+  m_GameObject: {fileID: 101564}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1db4a82e4af902746ab8099023e30b23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitType: 
-  currentHealth: 10
-  maximumHealth: 10
+  unitType: Wolf
+  currentHealth: 5
+  maximumHealth: 15
   currentAge: 0
-  maximumAge: 40
-  rateOfAge: .00200000009
-  maturityAge: 0
-  isBaby: 0
+  maximumAge: 125
+  rateOfAge: .0299999993
+  maturityAge: 7
+  isBaby: 1
   isFemale: 0
   wantsToMate: 0
   hasMate: 0
   isPregnant: 0
   mateTarget: {fileID: 0}
-  lengthOfPregnancy: 0
+  lengthOfPregnancy: 999
   currentPregnancy: 0
   numberOfChildren: 1
-  increasedConsumption: 0
-  currentResources: 20
-  maximumResources: 20
-  resourceRequirement: .0199999996
+  increasedConsumption: 999
+  currentResources: 10
+  maximumResources: 25
+  resourceRequirement: .0599999987
   isStarving: 0
   isHungry: 0
   killFlag: 0
   currentCapacity: 0
-  maximumCapacity: 0
-  senseDistance: 7
+  maximumCapacity: 25
+  senseDistance: 20
   distanceToTarget: Infinity
-  speed: 15
+  speed: 18
   upFlag: 1
   wanderSteps: 0
-  maxWanderSteps: 30
+  maxWanderSteps: 20
   isWandering: 0
   sizeOfSpace: 50
-  wanderTarget: {x: 0, y: .5, z: 0}
+  wanderTarget: {x: -.475907028, y: .5, z: -1.23326337}
   afraidFlag: 0
-  maxRunAwaySteps: 0
+  maxRunAwaySteps: 300
   runAwaySteps: 0
   travelFood: 0
-  AdultPredator: {fileID: 170212}
-  BabyPredator: {fileID: 101564, guid: 5d68998c2fd80ae4db8d042ae1c3ccab, type: 2}
+  AdultPredator: {fileID: 170212, guid: 62c0ca01592f86e4a9726386e03f65cc, type: 2}
+  BabyPredator: {fileID: 101564}
   chaseTarget: {fileID: 0}
---- !u!135 &13573862
+--- !u!135 &13538712
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 170212}
+  m_GameObject: {fileID: 101564}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -135,5 +135,5 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 170212}
+  m_RootGameObject: {fileID: 101564}
   m_IsPrefabParent: 1

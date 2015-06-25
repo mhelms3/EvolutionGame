@@ -65,7 +65,7 @@ public class StartScript : MonoBehaviour {
 	{
 		//Number of grass patches to explore = foodTotal^2
 		foodTotal = u.getPlatformSize(); //(e.g. 50 x 50matrix)
-		foodPercentage = .1f; //percent of explored grid units to have a grass patch 
+		foodPercentage = .01f; //percent of explored grid units to have a grass patch 
 		spread = Mathf.RoundToInt(u.getPlatformSize() / 2);
 		
 		
@@ -94,7 +94,7 @@ public class StartScript : MonoBehaviour {
 		//SHEEP
 		GameObject newGatherer;
 		gathererScript gsWorker;
-		startingSheep = 12; //must be at least 2
+		startingSheep = 200; //must be at least 2
 		
 		for (int k = 0; k<startingSheep; k++) {
 			startingPosition = new Vector3 (Random.value*20-10, .5f, Random.value*20-10 );        
@@ -117,12 +117,33 @@ public class StartScript : MonoBehaviour {
 		//PREDATOR
 		//float startX = (float)(Random.value * u.getPlatformSize () - .5 * u.getPlatformSize ());
 		//float startZ = (float)(Random.value * u.getPlatformSize () - .5 * u.getPlatformSize ());		
-		float startX = (float)(u.getPlatformSize ()/2);
-		float startZ = (float)(u.getPlatformSize ()/2);
-		startingPosition = new Vector3(startX, 1f, startZ);        
-		Instantiate(Predator, startingPosition, Quaternion.identity);
-		u.wolves++;
-		u.updateCountText ("Wolf");
+		//float startX = (float)(u.getPlatformSize ()/2);
+		//float startZ = (float)(u.getPlatformSize ()/2);
+		//startingPosition = new Vector3(startX, 1f, startZ);        
+		//Instantiate(Predator, startingPosition, Quaternion.identity);
+
+
+
+		GameObject newPredator;
+		predatorBehavior predB;
+		int startingPredator = 20; //must be at least 2
+		
+		for (int k = 0; k<startingPredator; k++) {
+			startingPosition = new Vector3 (Random.value*40-20, 1f, Random.value*40-20 );        
+			newPredator = Instantiate<GameObject> (Predator);
+			newPredator.transform.position = startingPosition;
+			predB = newPredator.GetComponent ("predatorBehavior") as predatorBehavior;
+			predB.assignGender();
+			//guarantee one male and one female
+			if (k == 0) predB.isFemale = true;
+			if (k == 1) predB.isFemale = false;
+			predB.genderColor ();
+			predB.setAdult ();
+			u.wolves++;
+			u.updateCountText ("Wolf");
+		}
+
+
 	}
 
 

@@ -12,11 +12,8 @@ public class gathererScript : moveBehaviors {
 	private baseBehavior baseTarget;
 	private float harvestSpeed;
 	private int tick = 0;
-	//private GameObject mateTarget;
 	private GameObject nearBase;
 	private GameObject target;
-
-
 
 
 	Vector3 predatorLocation = Vector3.zero;
@@ -28,13 +25,13 @@ public class gathererScript : moveBehaviors {
 	void Awake () {
 		//move stuff
 		unitType = "Sheep";
-		harvestSpeed = 0.1f * u.multiX;
+		harvestSpeed = 0.3f * u.multiX;
 		senseDistance = 3;
 		speed = 4f * u.multiX;
 		maxWanderSteps = (int)(30/u.multiX);
 		if (maxWanderSteps < 2)
 			maxWanderSteps = 2;
-		maxRunAwaySteps = 300;
+		maxRunAwaySteps = (int)(150/u.multiX);
 
 		wanderTarget = setNewCourse (transform.position);	//sets WanderTarget relative to where this object was instantiated	
 
@@ -69,9 +66,9 @@ public class gathererScript : moveBehaviors {
 	public void setAdult()
 	{
 
-		senseDistance = 12;
-		speed = 8f* u.multiX;
-		maxRunAwaySteps = 200;		
+		senseDistance = 6;
+		speed = 6f* u.multiX;
+		maxRunAwaySteps = (int)(100/u.multiX);		
 			
 		//alive stuff
 		maximumHealth = 20;
@@ -85,7 +82,7 @@ public class gathererScript : moveBehaviors {
 		isBaby = false;
 		maturityAge = 999;
 		//mating behavior
-		lengthOfPregnancy = 90f; 
+		lengthOfPregnancy = 20f; 
 		increasedConsumption = 2.2f; 
 		target = findClosestObjectWithinX ("Food", senseDistance);
 
@@ -95,8 +92,8 @@ public class gathererScript : moveBehaviors {
 	public void genderColor ()
 	{
 
-		Color32 pinkColor = new Color32(255,125,125,255);
-		Color32 blueColor = new Color32(0,75,255,255);
+		Color32 pinkColor = new Color32(190,190,190,255);
+		Color32 blueColor = new Color32(100,135,175,255);
 		Renderer rend = gameObject.GetComponent<Renderer>();
 		if(isFemale)
 			rend.material.color = pinkColor;
@@ -141,31 +138,30 @@ public class gathererScript : moveBehaviors {
 
 	private GameObject predatorCheck()
 	{
-		GameObject nearPredator = findClosestObject("Predator");
+		GameObject nearPredator = findClosestObjectWithinX("Predator", senseDistance);
 		if ((nearPredator != null) && (getTargetDistance (nearPredator.transform.position) < senseDistance))
 			return(nearPredator);
 		else
 			return(null);
 	}
 
-	private void mateCheck()
-	{
 
-		if ((currentHealth > .8 * maximumHealth) && (currentResources > .8 * maximumResources) && (!isBaby))
-			wantsToMate = true;
-
-		if ((currentHealth < .6 * maximumHealth) || (currentResources < .4 * maximumResources))
-			wantsToMate = false;
-
-	}
 
 
 
 	private void dropMateResources (GameObject mate)
 	{
 		gathererScript gathererTarget = mate.GetComponent ("gathererScript") as gathererScript;
-		gathererTarget.currentResources = gathererTarget.currentResources - 12;
+		gathererTarget.currentResources = .25f*gathererTarget.currentResources;
 	
+	}
+
+	private void pregnantMate (GameObject mate)
+	{
+		gathererScript gathererTarget = mate.GetComponent ("gathererScript") as gathererScript;
+		gathererTarget.currentResources = .25f*gathererTarget.currentResources;
+		gathererTarget.isPregnant = true;
+		
 	}
 
 	private void spawnBaby ()
@@ -178,14 +174,10 @@ public class gathererScript : moveBehaviors {
 		gsWorker.genderColor ();
 		u.babySheep++;
 		u.updateCountText("Sheep");
-
-		dropMateResources(mateTarget);
-		currentResources = currentResources - 12;
-		decoupleMates(mateTarget);
-
+		currentResources = .25f*currentResources;
 	}
 
-	private void matingBehavior ()
+	public void matingBehavior ()
 	{
 		float distanceToMate = 0;
 		if (hasMate)
@@ -200,7 +192,15 @@ public class gathererScript : moveBehaviors {
 				distanceToMate = getTargetDistance (mateTarget.transform.position);
 				if (distanceToMate < .25) 
 				{		
-					spawnBaby();
+					if(isFemale)					
+						isPregnant = true;
+					else
+						pregnantMate(mateTarget);
+
+					dropMateResources(mateTarget);
+					currentResources = .25f*currentResources;
+					decoupleMates(mateTarget);
+					//spawnBaby();
 				} 
 				else 			
 					moveToTarget (mateTarget.transform.position);
@@ -219,13 +219,7 @@ public class gathererScript : moveBehaviors {
 		{
 			GameObject tempMateTarget = findClosestMateWithinX ("Gatherer", senseDistance, isFemale);
 			if (tempMateTarget != null) 
-			{
-				distanceToMate = getTargetDistance (tempMateTarget.transform.position);
-				if (distanceToMate < senseDistance)
-					coupleMates(tempMateTarget);
-				else
-					getFood ();
-			}
+				coupleMates(tempMateTarget);
 			else
 				getFood ();
 		}
@@ -284,12 +278,12 @@ public class gathererScript : moveBehaviors {
 			target = findClosestObjectWithinX ("Food", senseDistance);
 			incTargetCount(target);
 		}
-		//if just finished wandering, get a new target
-		else if (wanderFood) {	
+		//if just finished wandering or running away, get a new target
+		else if (travelFood) {	
 			decTargetCount(target);
 			target = findClosestObjectWithinX ("Food", senseDistance);
 			incTargetCount(target);
-			wanderFood = false;
+			travelFood = false;
 		}
 
 
@@ -333,6 +327,17 @@ public class gathererScript : moveBehaviors {
 
 	}
 
+	private void pregCheck()
+	{
+		if (isPregnant)
+			currentPregnancy++;
+		if (currentPregnancy > lengthOfPregnancy) {
+			spawnBaby ();
+			isPregnant = false;
+			currentPregnancy = 0;
+		}
+	}
+
 	void Update () 
 	{
 
@@ -349,6 +354,7 @@ public class gathererScript : moveBehaviors {
 			starvingCheck ();
 			healthCheck ();
 			mateCheck ();
+			pregCheck ();
 
 			//add predator check and run away from predator
 			GameObject predatorTarget = predatorCheck ();
@@ -359,6 +365,7 @@ public class gathererScript : moveBehaviors {
 			if (predatorTarget != null && afraidFlag == false) {
 				//Debug.Log ("PREDATOR FOUND");
 				afraidFlag = true;
+				groundObject(.5f);
 				predatorLocation = predatorTarget.transform.position;
 			}
 

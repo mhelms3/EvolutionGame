@@ -1,10 +1,14 @@
 fileFormatVersion: 2
 guid: 1db4a82e4af902746ab8099023e30b23
-timeCreated: 1432306796
+timeCreated: 1435269257
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - mateTarget: {instanceID: 0}
+  - AdultPredator: {fileID: 170212, guid: 62c0ca01592f86e4a9726386e03f65cc, type: 2}
+  - BabyPredator: {fileID: 101564, guid: 5d68998c2fd80ae4db8d042ae1c3ccab, type: 2}
+  - chaseTarget: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

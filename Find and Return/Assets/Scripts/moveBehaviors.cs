@@ -16,7 +16,7 @@ public class moveBehaviors : aliveBehaviors {
 	public  bool afraidFlag = false;
 	public  int maxRunAwaySteps;
 	public  int runAwaySteps = 0;
-	public  bool wanderFood = false;
+	public  bool travelFood = false;
 
 	private universalScripts u = universalScripts.getInstance();
 	// Use this for initialization
@@ -25,9 +25,11 @@ public class moveBehaviors : aliveBehaviors {
 		sizeOfSpace = (u.getPlatformSize ()/2);
 	}
 
-	public void groundObject(){
-		Vector3 objPosition = transform.position;
-		objPosition.y = .5f;
+	public void groundObject(float yCoord){
+		float yDelta = transform.position.y - yCoord;
+		Vector3 objPosition = new Vector3 (0,-yDelta,0);
+		//Debug.Log (objPosition+" "+transform.position);
+		transform.Translate (objPosition); 
 	}
 	
 	public void bounceObject()
@@ -180,18 +182,32 @@ public class moveBehaviors : aliveBehaviors {
 	{        
 		Vector3 tempTarget = targetPosition;
 		float step = speed * Time.deltaTime;
-		tempTarget.y = .5f;
+		if (unitType == "Sheep")
+			tempTarget.y = .5f;
+		else
+			tempTarget.y = 1f;
 		//tempTarget.y = transform.position.y; //adjust the y co-ord to be level, to avoid "sinking"
 		transform.position = Vector3.MoveTowards(transform.position, tempTarget, step);
 	}
 	
+	private void boundaryPullback(Vector3 p)
+	{
+
+	}
+
+
 	public void moveAwayFromTarget(Vector3 targetPosition)
 	{        
 		Vector3 tempTarget = targetPosition;
 		//tempTarget.y = transform.position.y; //adjust the y co-ord to be level, to avoid "sinking"
-		tempTarget.y = .5f;
+		if (unitType == "Sheep")
+			tempTarget.y = .5f;
+		else
+			tempTarget.y = 1f;
+
 		float step = -speed * Time.deltaTime;
 		transform.position = Vector3.MoveTowards(transform.position, tempTarget, step);
+		boundaryPullback (transform.position);
 	}
 
 
@@ -221,7 +237,7 @@ public class moveBehaviors : aliveBehaviors {
 			wanderTarget = setNewCourse (transform.position);
 			wanderSteps = 0;
 			isWandering = false;
-			wanderFood = true;
+			travelFood = true;
 		}
 		else 
 		{	
@@ -235,10 +251,11 @@ public class moveBehaviors : aliveBehaviors {
 		float avoidTargetDistance = getTargetDistance(avoidTarget);
 		//Debug.Log ("PDistace:"+avoidTargetDistance+" TLoc x,z:" + string.Format ("{0:0.00}", avoidTarget.x) + "," + string.Format ("{0:0.00}", avoidTarget.z));
 		//Debug.Log ("PDistace:"+avoidTargetDistance+" RLoc x,z:" + string.Format ("{0:0.00}", transform.position.x) + "," + string.Format ("{0:0.00}", transform.position.z));
-		if (runAwaySteps > maxRunAwaySteps || avoidTargetDistance > 12) {
+		if (runAwaySteps > maxRunAwaySteps || avoidTargetDistance > (senseDistance*2)) {
 			wanderTarget = setNewCourse (transform.position);
 			runAwaySteps = 0;
 			afraidFlag = false;
+			travelFood = true;
 		} else
 			moveAwayFromTarget (avoidTarget);
 	}
