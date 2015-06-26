@@ -45,11 +45,11 @@ public class foodBehavior : MonoBehaviour {
 
 		maxFoodValue = 100;
 		growthRate = .05f*u.multiX;
-		seedRange = 5;
+		seedRange = 10;
 		seedNumber = 1;
-		seedSurvival = .3f;
+		seedSurvival = 1;
 		//seedCost = seedRange * seedNumber * seedSurvival* 15;
-		seedCost = 25;
+		seedCost = 20;
 		seedRequirement = seedCost*3;
 
 	}
@@ -122,7 +122,7 @@ public class foodBehavior : MonoBehaviour {
 		if (!u.isPaused) {
 			grow ();
 			//InvokeRepeating ("changeColor", .1f, 15*Time.deltaTime);
-			//changeColor(false);
+			changeColor();
 		}
 	}
 

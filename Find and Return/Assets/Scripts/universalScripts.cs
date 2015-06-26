@@ -103,7 +103,7 @@ public class universalScripts {
 	//private contructor
 	private universalScripts() {
 		//gridSize = 35;
-		platformSize = 300;
+		platformSize = 50;
 		grassGrid = new float[platformSize, platformSize];
 		grassGridEaters = new int[platformSize, platformSize];
 		initializeGrassGrid ();

@@ -8,6 +8,7 @@ public class aliveBehaviors : MonoBehaviour {
 	//current and maximum health - death if 0
 	public float currentHealth;
 	public float maximumHealth;
+	public float percentFemale;
 
 	//current and maximum age, and rate of aging, death at maximum age
 	public float currentAge;
@@ -48,7 +49,7 @@ public class aliveBehaviors : MonoBehaviour {
 	public void mateCheck()
 	{
 		
-		if ((currentHealth > .8 * maximumHealth) && (currentResources > .5 * maximumResources) && (!isBaby) && (!isPregnant))
+		if ((currentHealth > .8 * maximumHealth) && (currentResources > .3 * maximumResources) && (!isBaby) && (!isPregnant))
 			wantsToMate = true;
 		
 		if ((currentHealth < .6 * maximumHealth) || (currentResources < .4 * maximumResources))
@@ -58,10 +59,10 @@ public class aliveBehaviors : MonoBehaviour {
 
 
 
-	public void assignGender()
+	public void assignGender(float percentFemale)
 	{
 		float genderFemale = Random.value;
-		if (genderFemale < u.percentFemale)
+		if (genderFemale < percentFemale)
 			isFemale = true;
 		else
 			isFemale = false;

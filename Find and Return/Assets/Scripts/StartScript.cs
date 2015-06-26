@@ -65,8 +65,8 @@ public class StartScript : MonoBehaviour {
 	{
 		//Number of grass patches to explore = foodTotal^2
 		foodTotal = u.getPlatformSize(); //(e.g. 50 x 50matrix)
-		foodPercentage = .01f; //percent of explored grid units to have a grass patch 
-		spread = Mathf.RoundToInt(u.getPlatformSize() / 2);
+		foodPercentage = .10f; //percent of explored grid units to have a grass patch 
+
 		
 		
 		for (int i = 0; i < foodTotal; i++)
@@ -94,14 +94,19 @@ public class StartScript : MonoBehaviour {
 		//SHEEP
 		GameObject newGatherer;
 		gathererScript gsWorker;
-		startingSheep = 200; //must be at least 2
-		
+		startingSheep = 100; //must be at least 2
+
+		float x, z;
+
+
 		for (int k = 0; k<startingSheep; k++) {
-			startingPosition = new Vector3 (Random.value*20-10, .5f, Random.value*20-10 );        
+			x = Random.value*spread*2-(spread);
+			z = Random.value*spread*2-(spread);
+			startingPosition = new Vector3 (x, .5f, z);        
 			newGatherer = Instantiate<GameObject> (Worker);
 			newGatherer.transform.position = startingPosition;
 			gsWorker = newGatherer.GetComponent ("gathererScript") as gathererScript;
-			gsWorker.assignGender();
+			gsWorker.assignGender(gsWorker.percentFemale);
 			//guarantee one male and one female
 			if (k == 0) gsWorker.isFemale = true;
 			if (k == 1) gsWorker.isFemale = false;
@@ -126,14 +131,18 @@ public class StartScript : MonoBehaviour {
 
 		GameObject newPredator;
 		predatorBehavior predB;
-		int startingPredator = 20; //must be at least 2
+		int startingPredator = 8; //must be at least 2
+
+		float x, z;
 		
 		for (int k = 0; k<startingPredator; k++) {
-			startingPosition = new Vector3 (Random.value*40-20, 1f, Random.value*40-20 );        
+			x = Random.value*spread*2-(spread);
+			z = Random.value*spread*2-(spread);
+			startingPosition = new Vector3 (x, .5f, z);    
 			newPredator = Instantiate<GameObject> (Predator);
 			newPredator.transform.position = startingPosition;
 			predB = newPredator.GetComponent ("predatorBehavior") as predatorBehavior;
-			predB.assignGender();
+			predB.assignGender(predB.percentFemale);
 			//guarantee one male and one female
 			if (k == 0) predB.isFemale = true;
 			if (k == 1) predB.isFemale = false;
@@ -152,6 +161,7 @@ public class StartScript : MonoBehaviour {
     void Start()
 	{
 		universalScripts u = universalScripts.getInstance ();
+		spread = Mathf.RoundToInt(u.getPlatformSize() / 2);
 		initializeVariables ();
 		initializeDisplayVariables ();
 		initializeFoodGrid ();

@@ -12,9 +12,9 @@ public class predatorBehavior : moveBehaviors {
 
 	// Use this for initialization
 	void Awake () {
-
+		percentFemale = .60f;
 		unitType = "Wolf";
-		senseDistance = 10;
+		senseDistance = 7;
 		speed = 6.5f * u.multiX;
 
 		maxWanderSteps = (int)(30/u.multiX);
@@ -31,9 +31,9 @@ public class predatorBehavior : moveBehaviors {
 		currentAge = 0;
 		maximumAge = 35;
 		rateOfAge = .01f* u.multiX;
-		currentResources = 25; 
-		maximumResources = 25; 
-		resourceRequirement = .01f * u.multiX;
+		currentResources = 15; 
+		maximumResources = 15; 
+		resourceRequirement = .06f * u.multiX;
 		//resourceRequirement = 2f;
 		currentCapacity = 0;
 		maximumCapacity = 25;
@@ -50,7 +50,7 @@ public class predatorBehavior : moveBehaviors {
 	public void setAdult()
 	{
 		
-		senseDistance = 12;
+		senseDistance = 7;
 		speed = 8f* u.multiX;
 		maxRunAwaySteps = 200;		
 		
@@ -58,15 +58,15 @@ public class predatorBehavior : moveBehaviors {
 		maximumHealth = 40;
 		currentHealth = 40;
 		currentResources = 25; 
-		maximumResources = 75; 
+		maximumResources = 25; 
 		//resourceRequirement = .4f;
-		resourceRequirement = .01f* u.multiX;
+		resourceRequirement = .06f* u.multiX;
 		currentCapacity = 0;
 		maximumCapacity = 50;
 		isBaby = false;
 		maturityAge = 999;
 		//mating behavior
-		lengthOfPregnancy = 200f; 
+		lengthOfPregnancy = 20f; 
 		increasedConsumption = 2.2f; 
 		chaseTarget = findClosestObjectWithinX ("Gatherer", senseDistance);
 		
@@ -110,9 +110,9 @@ public class predatorBehavior : moveBehaviors {
 		gathererScript gs = chaseTarget.GetComponent ("gathererScript") as gathererScript;
 		gs.killFlag = true;
 		if (gs.isBaby == true)
-			currentCapacity += (5 + gs.currentCapacity + gs.currentResources)*2;
-		else
 			currentCapacity += (10 + gs.currentCapacity + gs.currentResources)*2;
+		else
+			currentCapacity += (20 + gs.currentCapacity + gs.currentResources)*2;
 		if (currentCapacity > maximumCapacity)
 			currentCapacity = maximumCapacity;
 	}
@@ -183,7 +183,7 @@ public class predatorBehavior : moveBehaviors {
 		//GameObject newAdultWorker = (GameObject) Instantiate (AdultWorker, startingPosition, Quaternion.identity);
 		GameObject newBabyWolf = (GameObject)Instantiate(BabyPredator, momPosition, Quaternion.identity);
 		predatorBehavior predB = newBabyWolf.GetComponent ("predatorBehavior") as predatorBehavior;
-		predB.assignGender();
+		predB.assignGender(predB.percentFemale);
 		predB.genderColor();
 		u.wolves++;
 		u.updateCountText("Wolf");
@@ -240,7 +240,7 @@ public class predatorBehavior : moveBehaviors {
 		}
 		else
 		{
-			GameObject tempMateTarget = findClosestMateWithinX ("Predator", senseDistance, isFemale);
+			GameObject tempMateTarget = findClosestMateWithinX ("Predator", senseDistance*6, isFemale);
 			if (tempMateTarget != null) 
 				coupleMates(tempMateTarget);
 			else

@@ -24,6 +24,7 @@ public class gathererScript : moveBehaviors {
 	// Use this for initialization
 	void Awake () {
 		//move stuff
+		percentFemale = .60f;
 		unitType = "Sheep";
 		harvestSpeed = 0.3f * u.multiX;
 		senseDistance = 3;
@@ -66,8 +67,9 @@ public class gathererScript : moveBehaviors {
 	public void setAdult()
 	{
 
-		senseDistance = 6;
-		speed = 6f* u.multiX;
+
+		senseDistance = 8;
+		speed = 6.3f* u.multiX;
 		maxRunAwaySteps = (int)(100/u.multiX);		
 			
 		//alive stuff
@@ -138,8 +140,8 @@ public class gathererScript : moveBehaviors {
 
 	private GameObject predatorCheck()
 	{
-		GameObject nearPredator = findClosestObjectWithinX("Predator", senseDistance);
-		if ((nearPredator != null) && (getTargetDistance (nearPredator.transform.position) < senseDistance))
+		GameObject nearPredator = findClosestObjectWithinX("Predator", senseDistance/2);
+		if ((nearPredator != null) && (getTargetDistance (nearPredator.transform.position) < senseDistance/2))
 			return(nearPredator);
 		else
 			return(null);
@@ -170,7 +172,7 @@ public class gathererScript : moveBehaviors {
 		//GameObject newAdultWorker = (GameObject) Instantiate (AdultWorker, startingPosition, Quaternion.identity);
 		GameObject newBabySheep = (GameObject)Instantiate(BabySheep, momPosition, Quaternion.identity);
 		gathererScript gsWorker = newBabySheep.GetComponent ("gathererScript") as gathererScript;
-		gsWorker.assignGender();
+		gsWorker.assignGender(gsWorker.percentFemale);
 		gsWorker.genderColor ();
 		u.babySheep++;
 		u.updateCountText("Sheep");
@@ -217,7 +219,7 @@ public class gathererScript : moveBehaviors {
 		}
 		else
 		{
-			GameObject tempMateTarget = findClosestMateWithinX ("Gatherer", senseDistance, isFemale);
+			GameObject tempMateTarget = findClosestMateWithinX ("Gatherer", senseDistance*3, isFemale);
 			if (tempMateTarget != null) 
 				coupleMates(tempMateTarget);
 			else

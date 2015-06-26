@@ -39,13 +39,13 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 103150}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_Materials:
   - {fileID: 2100000, guid: afc5228f0d23b1146863f90c1628a813, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
+  m_UseLightProbes: 0
   m_ReflectionProbeUsage: 1
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
@@ -89,6 +89,7 @@ MonoBehaviour:
   unitType: 
   currentHealth: 0
   maximumHealth: 0
+  percentFemale: 0
   currentAge: 0
   maximumAge: 0
   rateOfAge: 0
@@ -100,6 +101,8 @@ MonoBehaviour:
   isPregnant: 0
   mateTarget: {fileID: 0}
   lengthOfPregnancy: 0
+  currentPregnancy: 0
+  numberOfChildren: 1
   increasedConsumption: 0
   currentResources: 0
   maximumResources: 0
@@ -121,7 +124,7 @@ MonoBehaviour:
   afraidFlag: 0
   maxRunAwaySteps: 0
   runAwaySteps: 0
-  wanderFood: 0
+  travelFood: 0
   AdultWorker: {fileID: 103150}
   BabySheep: {fileID: 115026, guid: 5076f1e3e8903e844a5aafe942c09952, type: 2}
 --- !u!135 &13539072
@@ -142,7 +145,19 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_UseLightProbes
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 103150}
