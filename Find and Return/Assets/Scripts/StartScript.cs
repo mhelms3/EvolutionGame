@@ -9,6 +9,7 @@ public class StartScript : MonoBehaviour {
     public GameObject Base;
 	public GameObject Predator;
 	public GameObject theGame;
+	public poolScript thePool;
 
 	public Text sheepCountDisplay;
 	public Text babySheepCountDisplay;
@@ -65,7 +66,7 @@ public class StartScript : MonoBehaviour {
 	{
 		//Number of grass patches to explore = foodTotal^2
 		foodTotal = u.getPlatformSize(); //(e.g. 50 x 50matrix)
-		foodPercentage = .10f; //percent of explored grid units to have a grass patch 
+		foodPercentage = .1f; //percent of explored grid units to have a grass patch 
 
 		
 		
@@ -76,8 +77,11 @@ public class StartScript : MonoBehaviour {
 			{
 				//startingPosition = new Vector3((Random.value * spread)-spread/2*1f, .05f, (Random.value * spread)-spread/2 *1f);
 				startingPosition = new Vector3(i-spread, .1f, j-spread);
+
 				GameObject grass = Instantiate<GameObject>(Grass);
+				//GameObject grass = thePool.instance.GetObjectForType("Grass", true);
 				grass.transform.position = startingPosition;
+				//Debug.Log (grass.transform.position);
 				fb = grass .GetComponent("foodBehavior")as foodBehavior;
 				fb.foodValue = Random.value * 50f;
 				fb.gridXPos = i;
@@ -94,7 +98,7 @@ public class StartScript : MonoBehaviour {
 		//SHEEP
 		GameObject newGatherer;
 		gathererScript gsWorker;
-		startingSheep = 100; //must be at least 2
+		startingSheep = 20; //must be at least 2
 
 		float x, z;
 
@@ -110,7 +114,7 @@ public class StartScript : MonoBehaviour {
 			//guarantee one male and one female
 			if (k == 0) gsWorker.isFemale = true;
 			if (k == 1) gsWorker.isFemale = false;
-			gsWorker.genderColor ();
+			gsWorker.genderColor (gsWorker.femaleColor, gsWorker.maleColor);
 			gsWorker.setAdult ();
 			u.sheep++;
 			u.updateCountText ("Sheep");
@@ -131,7 +135,7 @@ public class StartScript : MonoBehaviour {
 
 		GameObject newPredator;
 		predatorBehavior predB;
-		int startingPredator = 8; //must be at least 2
+		int startingPredator = 0; //must be at least 2
 
 		float x, z;
 		
@@ -146,7 +150,7 @@ public class StartScript : MonoBehaviour {
 			//guarantee one male and one female
 			if (k == 0) predB.isFemale = true;
 			if (k == 1) predB.isFemale = false;
-			predB.genderColor ();
+			predB.genderColor (predB.femaleColor, predB.maleColor);
 			predB.setAdult ();
 			u.wolves++;
 			u.updateCountText ("Wolf");
@@ -160,13 +164,16 @@ public class StartScript : MonoBehaviour {
     // Use this for initialization
     void Start()
 	{
-		universalScripts u = universalScripts.getInstance ();
+		//universalScripts u = universalScripts.getInstance ();
+
+
 		spread = Mathf.RoundToInt(u.getPlatformSize() / 2);
 		initializeVariables ();
 		initializeDisplayVariables ();
 		initializeFoodGrid ();
 		initializeGatherers ();
 		initializePredators ();
+
 	
 	}
 	

@@ -1795,6 +1795,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 2010777878}
   - 114: {fileID: 2010777877}
+  - 114: {fileID: 2010777879}
   m_Layer: 0
   m_Name: StartScript
   m_TagString: Untagged
@@ -1818,6 +1819,7 @@ MonoBehaviour:
   PPtr<Object>: {fileID: 103706, guid: 4d511a21e05ac944db1d19cccde80ba3, type: 2}
   Predator: {fileID: 170212, guid: 62c0ca01592f86e4a9726386e03f65cc, type: 2}
   theGame: {fileID: 0}
+  thePool: {fileID: 0}
   sheepCountDisplay: {fileID: 608103981}
   babySheepCountDisplay: {fileID: 1640407001}
   totalSheepCountDisplay: {fileID: 1001623918}
@@ -1843,6 +1845,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
+--- !u!114 &2010777879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2010777876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98279b37af5045c4a84e0adb4a810028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefabs:
+  - {fileID: 129382, guid: 365fa7c43fcae734f993965b0e91bbde, type: 2}
+  - {fileID: 103150, guid: 74c70bdc4f60c3c42918d55dc60f34cc, type: 2}
+  amountToBuffer: 1400000002000000
+  defaultBufferAmount: 3
 --- !u!1 &2018182831
 GameObject:
   m_ObjectHideFlags: 0

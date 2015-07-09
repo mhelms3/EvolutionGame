@@ -12,8 +12,11 @@ public class gathererScript : moveBehaviors {
 	private baseBehavior baseTarget;
 	private float harvestSpeed;
 	private int tick = 0;
-	private GameObject nearBase;
+	private GameObject nearestBase;
 	private GameObject target;
+	public Color32 femaleColor = new Color32(190,190,190,255);
+	public Color32 maleColor = new Color32(100,135,175,255);
+	private bool baseMode = false;
 
 
 	Vector3 predatorLocation = Vector3.zero;
@@ -26,7 +29,7 @@ public class gathererScript : moveBehaviors {
 		//move stuff
 		percentFemale = .60f;
 		unitType = "Sheep";
-		harvestSpeed = 0.3f * u.multiX;
+		harvestSpeed = 0.25f * u.multiX;
 		senseDistance = 3;
 		speed = 4f * u.multiX;
 		maxWanderSteps = (int)(30/u.multiX);
@@ -36,7 +39,7 @@ public class gathererScript : moveBehaviors {
 
 		wanderTarget = setNewCourse (transform.position);	//sets WanderTarget relative to where this object was instantiated	
 
-		nearBase = findClosestObjectWithinX ("Base", senseDistance);
+		nearestBase = findClosestObjectWithinX ("Base", senseDistance);
 		target = findClosestObjectWithinX ("Food", senseDistance);
 
 		//alive stuff
@@ -47,7 +50,7 @@ public class gathererScript : moveBehaviors {
 		rateOfAge = .01f* u.multiX;
 		currentResources = 2; 
 		maximumResources = 12; 
-		resourceRequirement = .02f * u.multiX;
+		resourceRequirement = .04f * u.multiX;
 		//resourceRequirement = 2f;
 		currentCapacity = 0;
 		maximumCapacity = 4;
@@ -59,50 +62,32 @@ public class gathererScript : moveBehaviors {
 		//mating behavior
 		lengthOfPregnancy = 999f; 
 		increasedConsumption = 999f; 
-
-	
-
 	}
 
 	public void setAdult()
 	{
-
-
-		senseDistance = 8;
+		senseDistance = 5;
 		speed = 6.3f* u.multiX;
 		maxRunAwaySteps = (int)(100/u.multiX);		
 			
 		//alive stuff
 		maximumHealth = 20;
 		currentHealth = 20;
-		currentResources = 12; 
+		currentResources = 6; 
 		maximumResources = 24; 
 		//resourceRequirement = .4f;
-		resourceRequirement = .06f* u.multiX;
+		resourceRequirement = .2f* u.multiX;
 		currentCapacity = 0;
-		maximumCapacity = 6;
+		maximumCapacity = 5;
 		isBaby = false;
 		maturityAge = 999;
 		//mating behavior
-		lengthOfPregnancy = 20f; 
+		lengthOfPregnancy = 1f; 
 		increasedConsumption = 2.2f; 
 		target = findClosestObjectWithinX ("Food", senseDistance);
-
+		wanderTarget = setNewCourse (transform.position);
+		reproductionChance = .04f;
 	}
-
-
-	public void genderColor ()
-	{
-
-		Color32 pinkColor = new Color32(190,190,190,255);
-		Color32 blueColor = new Color32(100,135,175,255);
-		Renderer rend = gameObject.GetComponent<Renderer>();
-		if(isFemale)
-			rend.material.color = pinkColor;
-		else
-			rend.material.color = blueColor;
-	}
-
 
 	private void makeAdult ()
 	{
@@ -113,7 +98,7 @@ public class gathererScript : moveBehaviors {
 		gathererScript gsWorker = newAdultWorker.GetComponent ("gathererScript") as gathererScript;
 		gsWorker.setAdult ();
 		gsWorker.isFemale = tempGender;
-		gsWorker.genderColor();
+		gsWorker.genderColor(femaleColor, maleColor);
 
 		u.sheep++;
 		u.sheepMature++;
@@ -127,28 +112,25 @@ public class gathererScript : moveBehaviors {
 
 	private void eatObject (GameObject food)
 	{		
-		eatTarget = food.GetComponent("foodBehavior")as foodBehavior;
-		eatTarget.foodValue -= harvestSpeed;
-		currentCapacity += harvestSpeed;
-		if (eatTarget.foodValue < 1) 
-		{
+		eatTarget = food.GetComponent ("foodBehavior")as foodBehavior;
+		eatTarget.foodValue -= harvestSpeed*Time.deltaTime*30;
+		currentCapacity += harvestSpeed*Time.deltaTime*30;
+		if (eatTarget.foodValue < 1) {
 			eatTarget.killFlag = true;
 		}
-		//else
-			//eatTarget.changeColor ();
 	}
 
 	private GameObject predatorCheck()
 	{
+		return null;
+		/*
 		GameObject nearPredator = findClosestObjectWithinX("Predator", senseDistance/2);
 		if ((nearPredator != null) && (getTargetDistance (nearPredator.transform.position) < senseDistance/2))
 			return(nearPredator);
 		else
 			return(null);
+			*/
 	}
-
-
-
 
 
 	private void dropMateResources (GameObject mate)
@@ -173,7 +155,7 @@ public class gathererScript : moveBehaviors {
 		GameObject newBabySheep = (GameObject)Instantiate(BabySheep, momPosition, Quaternion.identity);
 		gathererScript gsWorker = newBabySheep.GetComponent ("gathererScript") as gathererScript;
 		gsWorker.assignGender(gsWorker.percentFemale);
-		gsWorker.genderColor ();
+		gsWorker.genderColor (femaleColor, maleColor);
 		u.babySheep++;
 		u.updateCountText("Sheep");
 		currentResources = .25f*currentResources;
@@ -182,46 +164,43 @@ public class gathererScript : moveBehaviors {
 	public void matingBehavior ()
 	{
 		float distanceToMate = 0;
-		if (hasMate)
-		{
-			if (mateTarget == null)
-			{
-				Debug.Log ("ERROR: hasMate true, mateTarget == null)");
-				getFood();
-			}
-			else
-			{
-				distanceToMate = getTargetDistance (mateTarget.transform.position);
-				if (distanceToMate < .25) 
-				{		
-					if(isFemale)					
-						isPregnant = true;
-					else
-						pregnantMate(mateTarget);
+		if (u.sexualReproduction == true)
+	
+			if (hasMate) {
+				if (mateTarget == null) {
+					Debug.Log ("ERROR: hasMate true, mateTarget == null)");
+					getFood ();
+				} else {
+					distanceToMate = getTargetDistance (mateTarget.transform.position);
+					if (distanceToMate < .25) {		
+						if (isFemale)					
+							isPregnant = true;
+						else
+							pregnantMate (mateTarget);
 
-					dropMateResources(mateTarget);
-					currentResources = .25f*currentResources;
-					decoupleMates(mateTarget);
-					//spawnBaby();
-				} 
-				else 			
-					moveToTarget (mateTarget.transform.position);
-				
+						dropMateResources (mateTarget);
+						currentResources = .25f * currentResources;
+						decoupleMates (mateTarget);
+						//spawnBaby();
+					} else 			
+						moveToTarget (mateTarget.transform.position);
+						
+				}
+			} else if (mateTarget != null) {
+				Debug.Log ("ERROR: hasMate False, but mateTarget not null");
+				hasMate = true;
+				getFood ();
+			} else {
+				GameObject tempMateTarget = findClosestMateWithinX ("Gatherer", senseDistance * 3, isFemale);
+				if (tempMateTarget != null) 
+					coupleMates (tempMateTarget);
+				else
+					getFood ();
 			}
-		}
-		
-		
-		else if (mateTarget != null) 
-		{
-			Debug.Log ("ERROR: hasMate False, but mateTarget not null");
-			hasMate = true;
-			getFood ();
-		}
-		else
-		{
-			GameObject tempMateTarget = findClosestMateWithinX ("Gatherer", senseDistance*3, isFemale);
-			if (tempMateTarget != null) 
-				coupleMates(tempMateTarget);
+
+		else {
+			if (Random.value < reproductionChance)
+				isPregnant = true;
 			else
 				getFood ();
 		}
@@ -231,25 +210,25 @@ public class gathererScript : moveBehaviors {
 
 	private void gotoBase()
 	{
-		if (nearBase==null)
-			nearBase = findClosestObject("Base");
+		if (nearestBase==null)
+			nearestBase = findClosestObject("Base");
 		else
 		{
-			distanceToTarget = getTargetDistance(nearBase.transform.position);
+			distanceToTarget = getTargetDistance(nearestBase.transform.position);
 			if (distanceToTarget < .5)
 			{
-				baseTarget = nearBase.GetComponent("baseBehavior")as baseBehavior;
+				baseTarget = nearestBase.GetComponent("baseBehavior")as baseBehavior;
 				baseTarget.resourceFood += currentCapacity;
 				currentCapacity = 0;
 				returnFlag = false;
 			}
 			else if (distanceToTarget > senseDistance)
 			{
-				nearBase = findClosestObject("Base");
-				moveToTarget(nearBase.transform.position);
+				nearestBase = findClosestObject("Base");
+				moveToTarget(nearestBase.transform.position);
 			}
 			else
-				moveToTarget(nearBase.transform.position);
+				moveToTarget(nearestBase.transform.position);
 		}
 	}
 
@@ -318,13 +297,14 @@ public class gathererScript : moveBehaviors {
 				else
 					moveToTarget(target.transform.position);
 			}
-			/*
-			if (currentCapacity >= maximumCapacity)
+
+			//if return to base is active
+			if ((currentCapacity >= maximumCapacity) && (baseMode))
 			{
 				returnFlag = true;
-				groundObject();
+				groundObject(.5f);
 			}
-			*/
+
 		}
 
 	}

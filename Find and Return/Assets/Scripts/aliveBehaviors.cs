@@ -29,7 +29,7 @@ public class aliveBehaviors : MonoBehaviour {
 	public float currentPregnancy =0;
 	public int  numberOfChildren =1; 
 	public float increasedConsumption;
-
+	public float reproductionChance;
 
 
 	//current and maximum level of "resource energy" that the creature maintains for its health
@@ -46,13 +46,24 @@ public class aliveBehaviors : MonoBehaviour {
 	public float maximumCapacity;
 	private universalScripts u = universalScripts.getInstance();
 
+	public void genderColor (Color32 female, Color32 male)
+	{
+		
+
+		Renderer rend = gameObject.GetComponent<Renderer>();
+		if(isFemale)
+			rend.material.color = female;
+		else
+			rend.material.color = male;
+	}
+
 	public void mateCheck()
 	{
 		
-		if ((currentHealth > .8 * maximumHealth) && (currentResources > .3 * maximumResources) && (!isBaby) && (!isPregnant))
+		if ((currentHealth > .8 * maximumHealth) && (currentResources > .1 * maximumResources) && (!isBaby) && (!isPregnant))
 			wantsToMate = true;
 		
-		if ((currentHealth < .6 * maximumHealth) || (currentResources < .4 * maximumResources))
+		if ((currentHealth < .4 * maximumHealth) || (currentResources < .05 * maximumResources))
 			wantsToMate = false;
 		
 	}
@@ -71,7 +82,7 @@ public class aliveBehaviors : MonoBehaviour {
 	public void ageCreature(int factor){
 		//age
 
-			currentAge = currentAge + (rateOfAge*factor);
+			currentAge = currentAge + (rateOfAge*factor*Time.deltaTime*30);
 		if (currentAge > maximumAge) {
 			killFlag = true;
 			u.sheepAge++;
@@ -81,7 +92,7 @@ public class aliveBehaviors : MonoBehaviour {
 	}
 
 	public bool hungryCheck(){
-		if (currentResources  < (maximumResources*0.65f)) 
+		if (currentResources  < (maximumResources*0.85f)) 
 			return(true);
 		else
 			return(false);
@@ -93,8 +104,8 @@ public class aliveBehaviors : MonoBehaviour {
 		if (isHungry) {
 			if (currentCapacity > 0) {
 				float eatAmount = Mathf.Min (currentCapacity, (maximumResources - currentResources));			
-				currentCapacity -= eatAmount;
-				currentResources += eatAmount;
+				currentCapacity -= eatAmount*Time.deltaTime*30;
+				currentResources += eatAmount*Time.deltaTime*30;
 			} 
 		}
 		isHungry = hungryCheck ();
@@ -103,7 +114,7 @@ public class aliveBehaviors : MonoBehaviour {
 	public void consumeResources(int factor)
 	{
 		//resource consumption
-		currentResources -= (resourceRequirement*factor);
+		currentResources -= (resourceRequirement*factor*Time.deltaTime*30);
 	}
 
 	public void starvingCheck(){
@@ -123,7 +134,7 @@ public class aliveBehaviors : MonoBehaviour {
 			u.sheepStarve++;
 			u.updateCountText ("Starve");
 		} else if ((currentHealth < maximumHealth) && (!isStarving))
-			currentHealth += maximumHealth * .05f;
+			currentHealth += maximumHealth * .05f *Time.deltaTime*30;
 
 
 	}
