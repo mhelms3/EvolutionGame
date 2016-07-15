@@ -51,7 +51,7 @@ public class foodBehavior : MonoBehaviour {
 		thisFood = gameObject;
 
 		maxFoodValue = 100;
-		growthRate = .07f*u.multiX;
+		growthRate = .14f*u.multiX;
 		seedRange = 10;
 		seedNumber = 1;
 		seedSurvival = 1;

@@ -98,7 +98,7 @@ public class StartScript : MonoBehaviour {
 		//SHEEP
 		GameObject newGatherer;
 		gathererScript gsWorker;
-		startingSheep = 20; //must be at least 2
+		startingSheep = 40; //must be at least 2
 
 		float x, z;
 
@@ -135,7 +135,7 @@ public class StartScript : MonoBehaviour {
 
 		GameObject newPredator;
 		predatorBehavior predB;
-		int startingPredator = 0; //must be at least 2
+		int startingPredator = 10; //must be at least 2
 
 		float x, z;
 		
