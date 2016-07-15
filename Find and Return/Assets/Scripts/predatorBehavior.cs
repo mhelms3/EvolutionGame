@@ -9,16 +9,13 @@ public class predatorBehavior : moveBehaviors {
 	public GameObject chaseTarget;
 	Vector3 rivalLocation = Vector3.zero;
 	private universalScripts u = universalScripts.getInstance();
-	public Color32 femaleColor = new Color32(81,75,22,255);
-	public Color32 maleColor = new Color32(47,34,6,255);
-
 
 	// Use this for initialization
 	void Awake () {
 		percentFemale = .60f;
 		unitType = "Wolf";
-		senseDistance = 12;
-		speed =15f * u.multiX;
+		senseDistance = 7;
+		speed = 6.5f * u.multiX;
 
 		maxWanderSteps = (int)(30/u.multiX);
 		if (maxWanderSteps < 2)
@@ -30,13 +27,13 @@ public class predatorBehavior : moveBehaviors {
 		
 		//alive stuff
 		maximumHealth = 15;
-		currentHealth = 15;
+		currentHealth = 5;
 		currentAge = 0;
 		maximumAge = 35;
 		rateOfAge = .01f* u.multiX;
 		currentResources = 15; 
 		maximumResources = 15; 
-		resourceRequirement = .3f * u.multiX;
+		resourceRequirement = .06f * u.multiX;
 		//resourceRequirement = 2f;
 		currentCapacity = 0;
 		maximumCapacity = 25;
@@ -53,29 +50,40 @@ public class predatorBehavior : moveBehaviors {
 	public void setAdult()
 	{
 		
-		senseDistance = 15;
-		speed = 25f* u.multiX;
+		senseDistance = 7;
+		speed = 8f* u.multiX;
 		maxRunAwaySteps = 200;		
 		
 		//alive stuff
-		maximumHealth = 20;
-		currentHealth = 20;
-		currentResources = 20; 
-		maximumResources = 20; 
+		maximumHealth = 40;
+		currentHealth = 40;
+		currentResources = 25; 
+		maximumResources = 25; 
 		//resourceRequirement = .4f;
-		resourceRequirement = .5f* u.multiX;
+		resourceRequirement = .06f* u.multiX;
 		currentCapacity = 0;
 		maximumCapacity = 50;
 		isBaby = false;
 		maturityAge = 999;
 		//mating behavior
-		lengthOfPregnancy = 1f; 
+		lengthOfPregnancy = 20f; 
 		increasedConsumption = 2.2f; 
 		chaseTarget = findClosestObjectWithinX ("Gatherer", senseDistance);
-		reproductionChance = .5f;
 		
 	}
 
+	public void genderColor ()
+	{
+		
+		Color32 redColor = new Color32(81,75,22,255);
+		Color32 blackColor = new Color32(47,34,6,255);
+		Renderer rend = gameObject.GetComponent<Renderer>();
+		if(isFemale)
+			rend.material.color = redColor;
+		else
+			rend.material.color = blackColor;
+
+	}
 
 	private void makeAdult ()
 	{
@@ -86,7 +94,7 @@ public class predatorBehavior : moveBehaviors {
 		predatorBehavior predB = newAdultPredator.GetComponent ("predatorBehavior") as predatorBehavior;
 		predB.setAdult ();
 		predB.isFemale = tempGender;
-		predB.genderColor(femaleColor, maleColor);
+		predB.genderColor();
 		
 		u.wolves++;
 		//u.predatorMature++;
@@ -176,7 +184,7 @@ public class predatorBehavior : moveBehaviors {
 		GameObject newBabyWolf = (GameObject)Instantiate(BabyPredator, momPosition, Quaternion.identity);
 		predatorBehavior predB = newBabyWolf.GetComponent ("predatorBehavior") as predatorBehavior;
 		predB.assignGender(predB.percentFemale);
-		predB.genderColor(femaleColor, maleColor);
+		predB.genderColor();
 		u.wolves++;
 		u.updateCountText("Wolf");
 		currentResources = .25f*currentResources;
@@ -195,41 +203,46 @@ public class predatorBehavior : moveBehaviors {
 	public void matingBehavior ()
 	{
 		float distanceToMate = 0;
-		if (u.sexualReproduction == true) {
-			if (hasMate) {
-				if (mateTarget == null) {
-					Debug.Log ("ERROR: hasMate true, mateTarget == null)");
-					getFood ();
-				} else {
-					distanceToMate = getTargetDistance (mateTarget.transform.position);
-					if (distanceToMate < .25) {		
-						if (isFemale)					
-							isPregnant = true;
-						else
-							pregnantMate (mateTarget);
-						
-						dropMateResources (mateTarget);
-						currentResources = .25f * currentResources;
-						decoupleMates (mateTarget);
-						//spawnBaby();
-					} else 			
-						moveToTarget (mateTarget.transform.position);
-					
-				}
-			} else if (mateTarget != null) {
-				Debug.Log ("ERROR: hasMate False, but mateTarget not null");
-				hasMate = true;
-				getFood ();
-			} else {
-				GameObject tempMateTarget = findClosestMateWithinX ("Predator", senseDistance * 6, isFemale);
-				if (tempMateTarget != null) 
-					coupleMates (tempMateTarget);
-				else
-					getFood ();
+		if (hasMate)
+		{
+			if (mateTarget == null)
+			{
+				Debug.Log ("ERROR: hasMate true, mateTarget == null)");
+				getFood();
 			}
-		} else {
-			if (Random.value < .10)
-				isPregnant = true;
+			else
+			{
+				distanceToMate = getTargetDistance (mateTarget.transform.position);
+				if (distanceToMate < .25) 
+				{		
+					if(isFemale)					
+						isPregnant = true;
+					else
+						pregnantMate(mateTarget);
+					
+					dropMateResources(mateTarget);
+					currentResources = .25f*currentResources;
+					decoupleMates(mateTarget);
+					//spawnBaby();
+				} 
+				else 			
+					moveToTarget (mateTarget.transform.position);
+				
+			}
+		}
+		
+		
+		else if (mateTarget != null) 
+		{
+			Debug.Log ("ERROR: hasMate False, but mateTarget not null");
+			hasMate = true;
+			getFood ();
+		}
+		else
+		{
+			GameObject tempMateTarget = findClosestMateWithinX ("Predator", senseDistance*6, isFemale);
+			if (tempMateTarget != null) 
+				coupleMates(tempMateTarget);
 			else
 				getFood ();
 		}

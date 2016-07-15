@@ -52,7 +52,6 @@
      <Compile Include="Assets\Scripts\foodBehavior.cs" />
      <Compile Include="Assets\Scripts\gathererScript.cs" />
      <Compile Include="Assets\Scripts\moveBehaviors.cs" />
-     <Compile Include="Assets\Scripts\poolScript.cs" />
      <Compile Include="Assets\Scripts\predatorBehavior.cs" />
      <Compile Include="Assets\Scripts\scrollCamera.cs" />
      <Compile Include="Assets\Scripts\universalScripts.cs" />

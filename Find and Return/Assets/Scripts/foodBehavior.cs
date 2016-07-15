@@ -9,10 +9,6 @@ public class foodBehavior : MonoBehaviour {
 	public int gridXPos;
 	public int gridZPos;
 
-	public float reseedDelay;
-	public float reseedTimer;
-	public bool isDormant;
-
 	private Color32 green1;
 	private Color32 green2;
 	private Color32 green3;
@@ -37,13 +33,10 @@ public class foodBehavior : MonoBehaviour {
 	private universalScripts u = universalScripts.getInstance();
 	private int foodTicker = 0;
 	public bool killFlag = false;
-	private int colorUpdate;
-
 
 	// Use this for initialization
 	void Start () {
 
-		reseedDelay = 100f;
 		green1 = new Color32(28,255,19,255);
 		green2 = new Color32(30,120,12,255);
 		green3 = new Color32(71,30,7,255);
@@ -51,26 +44,20 @@ public class foodBehavior : MonoBehaviour {
 		thisFood = gameObject;
 
 		maxFoodValue = 100;
-		growthRate = .07f*u.multiX;
+		growthRate = .05f*u.multiX;
 		seedRange = 10;
 		seedNumber = 1;
 		seedSurvival = 1;
 		//seedCost = seedRange * seedNumber * seedSurvival* 15;
 		seedCost = 20;
 		seedRequirement = seedCost*3;
-		colorUpdate = (int)(Random.value * 300);
-
 
 	}
 
 	public void changeColor()
 	{
 		rend = thisFood.GetComponent<Renderer>();
-
-		float colorBatcher = (int) (foodValue / maxFoodValue * 10);
-		colorBatcher = colorBatcher / 10;
-
-		green2 = Color32.Lerp (green3, green1, colorBatcher);
+		green2 = Color32.Lerp (green3, green1, (foodValue / maxFoodValue));
 		rend.material.color = green2;
 	}
 
@@ -114,9 +101,9 @@ public class foodBehavior : MonoBehaviour {
 	public void grow()
 	{
 		foodValue += growthRate;
-		if (foodValue > seedRequirement || foodValue==maxFoodValue) 
+		if (foodValue > seedRequirement || foodValue==maxFoodValue) {
 			seedFood();
-
+		}
 	}
 
 	public void killPlant()
@@ -124,10 +111,6 @@ public class foodBehavior : MonoBehaviour {
 		if (killFlag) {
 			u.setGridValue (gridXPos, gridZPos, 0);
 			u.setGridEaters (gridXPos, gridZPos, 0);
-			//foodValue = 0;
-			//reseedTimer = reseedDelay;
-			//killFlag = false;
-			//isDormant = true;
 			Destroy (gameObject);
 			u.foodCount--;
 			u.updateCountText ("Food");
@@ -137,20 +120,9 @@ public class foodBehavior : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!u.isPaused) {
-			/*
-			if (reseedTimer>1)
-				reseedTimer-=Time.deltaTime;
-			else
-			{
-				grow ();
-				isDormant = false;
-			}
-			*/
 			grow ();
-			foodTicker++;
 			//InvokeRepeating ("changeColor", .1f, 15*Time.deltaTime);
-			if (foodTicker%300==colorUpdate)			
-				changeColor();
+			changeColor();
 		}
 	}
 

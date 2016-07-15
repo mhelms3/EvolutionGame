@@ -37,8 +37,7 @@ public class universalScripts {
 	public Text fcount;
 
 	public bool isPaused = false;
-	public float multiX = 2;
-	public bool sexualReproduction = false;
+	public float multiX = 3;
 
 
 
@@ -104,7 +103,7 @@ public class universalScripts {
 	//private contructor
 	private universalScripts() {
 		//gridSize = 35;
-		platformSize = 70;
+		platformSize = 50;
 		grassGrid = new float[platformSize, platformSize];
 		grassGridEaters = new int[platformSize, platformSize];
 		initializeGrassGrid ();
