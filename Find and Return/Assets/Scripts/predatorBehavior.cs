@@ -18,7 +18,7 @@ public class predatorBehavior : moveBehaviors {
 		percentFemale = .60f;
 		unitType = "Wolf";
 		senseDistance = 12;
-		speed =12f * u.multiX;
+		speed =15f * u.multiX;
 
 		maxWanderSteps = (int)(30/u.multiX);
 		if (maxWanderSteps < 2)
@@ -32,18 +32,18 @@ public class predatorBehavior : moveBehaviors {
 		maximumHealth = 15;
 		currentHealth = 15;
 		currentAge = 0;
-		maximumAge = 25;
+		maximumAge = 35;
 		rateOfAge = .01f* u.multiX;
 		currentResources = 15; 
 		maximumResources = 15; 
-		resourceRequirement = .25f * u.multiX;
+		resourceRequirement = .3f * u.multiX;
 		//resourceRequirement = 2f;
 		currentCapacity = 0;
 		maximumCapacity = 25;
 		
 		//childhood behavior
 		isBaby = true;
-		maturityAge = 4;
+		maturityAge = 7;
 		
 		//mating behavior
 		lengthOfPregnancy = 999f; 
@@ -53,17 +53,17 @@ public class predatorBehavior : moveBehaviors {
 	public void setAdult()
 	{
 		
-		senseDistance = 10;
-		speed = 20f* u.multiX;
+		senseDistance = 15;
+		speed = 25f* u.multiX;
 		maxRunAwaySteps = 200;		
 		
 		//alive stuff
 		maximumHealth = 20;
 		currentHealth = 20;
-		currentResources = 10; 
+		currentResources = 20; 
 		maximumResources = 20; 
 		//resourceRequirement = .4f;
-		resourceRequirement = .75f* u.multiX;
+		resourceRequirement = .5f* u.multiX;
 		currentCapacity = 0;
 		maximumCapacity = 50;
 		isBaby = false;
@@ -72,7 +72,7 @@ public class predatorBehavior : moveBehaviors {
 		lengthOfPregnancy = 1f; 
 		increasedConsumption = 2.2f; 
 		chaseTarget = findClosestObjectWithinX ("Gatherer", senseDistance);
-		reproductionChance = .05f;
+		reproductionChance = .5f;
 		
 	}
 

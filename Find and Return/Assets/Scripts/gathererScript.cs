@@ -29,7 +29,7 @@ public class gathererScript : moveBehaviors {
 		//move stuff
 		percentFemale = .60f;
 		unitType = "Sheep";
-		harvestSpeed = 0.3f * u.multiX;
+		harvestSpeed = 0.25f * u.multiX;
 		senseDistance = 3;
 		speed = 4f * u.multiX;
 		maxWanderSteps = (int)(30/u.multiX);
@@ -57,7 +57,7 @@ public class gathererScript : moveBehaviors {
 
 		//childhood behavior
 		isBaby = true;
-		maturityAge = 3;
+		maturityAge = 4;
 
 		//mating behavior
 		lengthOfPregnancy = 999f; 
@@ -86,7 +86,7 @@ public class gathererScript : moveBehaviors {
 		increasedConsumption = 2.2f; 
 		target = findClosestObjectWithinX ("Food", senseDistance);
 		wanderTarget = setNewCourse (transform.position);
-		reproductionChance = .06f;
+		reproductionChance = .04f;
 	}
 
 	private void makeAdult ()
@@ -129,7 +129,7 @@ public class gathererScript : moveBehaviors {
 			return(nearPredator);
 		else
 			return(null);
-		*/
+			*/
 	}
 
 

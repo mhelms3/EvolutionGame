@@ -233,13 +233,13 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 565867848}
   m_GameObject: {fileID: 360326572}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
   m_Materials:
   - {fileID: 2100000, guid: e206ce82467ef9d46a32e2970efb0778, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
+  m_UseLightProbes: 1
   m_ReflectionProbeUsage: 1
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
@@ -461,18 +461,6 @@ Prefab:
     - target: {fileID: 482498, guid: 4b6af907942903a42903148840e598a3, type: 2}
       propertyPath: m_RootOrder
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2364112, guid: 4b6af907942903a42903148840e598a3, type: 2}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2364112, guid: 4b6af907942903a42903148840e598a3, type: 2}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2364112, guid: 4b6af907942903a42903148840e598a3, type: 2}
-      propertyPath: m_UseLightProbes
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
